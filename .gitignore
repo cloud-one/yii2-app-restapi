@@ -36,3 +36,4 @@ tests/_support/_generated
 /web/index.php
 /config/console-local.php
 /config/web-local.php
+/composer.lock
