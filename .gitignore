@@ -31,3 +31,8 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+/yii
+/web/index.php
+/config/console-local.php
+/config/web-local.php

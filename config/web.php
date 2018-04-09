@@ -1,7 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$routes = require __DIR__ . '/routes.php';
 
 $config = [
     'id' => 'basic',
@@ -11,10 +11,20 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'modules' => [
+        'v1' => [
+            'class' => 'app\modules\v1\V1Module',
+            'modules' => [
+                'system' => [
+                    'class' => 'app\modules\v1\modules\system\SystemModule',
+                ],
+            ]
+        ],
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '',
+            'cookieValidationKey' => 'e_X3OrcfNKOz4Dymvgkeg9vRERXiX8oA',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -22,15 +32,14 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'enableSession' => false,
+            'loginUrl' => null
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
         'log' => [
@@ -42,33 +51,34 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => $routes,
         ],
-        */
+        'formatter' => [
+            'class' => 'app\components\Formatter',
+            'nullDisplay' => '',
+            'defaultTimeZone' => 'America/Fortaleza',
+            'dateFormat' => 'dd/MM/yyyy',
+            'datetimeFormat' => 'dd/MM/yyyy HH:mm:ss',
+            'thousandSeparator' => '.',
+            'decimalSeparator' => ',',
+//            'numberFormatterOptions' => [
+//                NumberFormatter::MIN_FRACTION_DIGITS => 2,
+//                NumberFormatter::MAX_FRACTION_DIGITS => 2,
+//            ]
+        ],
     ],
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
