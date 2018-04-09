@@ -8,58 +8,55 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
-/**
- * @property bool status
- */
 class ModelBase extends ActiveRecord
 {
     /**
-     * @var string Label para as colunas ID
+     * @var string
      */
     protected $idLabel = 'ID';
 
     /**
-     * @var string Label para as colunas created_at
+     * @var string
      */
     protected $createdAtLabel = 'Created Datetime';
 
     /**
-     * @var string Label para as colunas updated_at
+     * @var string
      */
     protected $updateAtLabel = 'Last Updated';
 
     /**
-     * @var string Label para as colunas user_ins_id
+     * @var string
      */
     protected $createdByLabel = 'Created By';
 
     /**
-     * @var string Label para as colunas user_ins_id
+     * @var string
      */
     protected $updatedByLabel = 'Last Updated By';
 
     /**
-     * @var string Label oara os status
+     * @var string
      */
     protected $statusLabel = 'Active';
 
     /**
-     * @var string Nome da coluna que representa o created_at
+     * @var string
      */
     private $createdAtAttribute = 'created_at';
 
     /**
-     * @var string Nome da coluna que representa o updated_at
+     * @var string
      */
     private $updatedAtAttribute = 'updated_at';
 
     /**
-     * @var string Nome da coluna que representa o created_by
+     * @var string
      */
     private $createdByAttribute = 'created_by';
 
     /**
-     * @var string Nome da coluna que representa o updated_by
+     * @var string
      */
     private $updatedByAttribute = 'updated_by';
 
@@ -87,10 +84,10 @@ class ModelBase extends ActiveRecord
     }
 
     /**
-     * Metodo generico para auxiliar na montagem dos dropdown dos formularios
-     * @param string $labelColumn Coluna/propriedade que representa o label do dropdown
-     * @param string $keyColumn Coluna/propriedade que representa o valor do dropdown
-     * @param string $order Ordenacao da consulta, caso seja necessaria
+     * Generic method to assist in assembling the forms dropdown
+     * @param string $labelColumn
+     * @param string $keyColumn
+     * @param string $order
      * @return array
      */
     public static function getDropdownOptions($labelColumn, $keyColumn = 'id', $order = null)
@@ -112,7 +109,6 @@ class ModelBase extends ActiveRecord
     }
 
     /**
-     * Metodo que retorna o nome do atributo created_at do model
      * @return bool|string
      */
     private function getCreatedAtAttribute()
@@ -121,7 +117,6 @@ class ModelBase extends ActiveRecord
     }
 
     /**
-     * Metodo que retorna o nome do atributo updated_at do model
      * @return bool|string
      */
     private function getUpdatedAtAttribute()
@@ -130,7 +125,6 @@ class ModelBase extends ActiveRecord
     }
 
     /**
-     * Metodo que retorna o nome do atributo created_by do model
      * @return bool|string
      */
     private function getCreatedByAttribute()
@@ -139,7 +133,6 @@ class ModelBase extends ActiveRecord
     }
 
     /**
-     * Metodo que retorna o nome do atributo updated_by do model
      * @return bool|string
      */
     private function getUpdatedByAttribute()
