@@ -16,7 +16,7 @@ class Formatter extends YiiFormatter
      */
     public function asPhoneDDD($value, $withLink = true)
     {
-        if (Utils::IsNullOrEmpty($value)) {
+        if (is_null($value) || !empty($value)) {
             return $this->nullDisplay;
         }
 

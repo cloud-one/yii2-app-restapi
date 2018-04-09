@@ -4,7 +4,6 @@ namespace app\components\behaviors;
 
 use app\components\Formatter;
 use Yii;
-use app\components\Utils;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\db\ActiveRecord;
