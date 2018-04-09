@@ -14,19 +14,20 @@ DIRECTORY STRUCTURE
 
 The directory structure is similar to the Basic template added in the Advanced feature, which is the generation of the `` -local.php``, `web / index.php` files, and the` yii` script according to your environment
 
-      assets/             contains assets definition
-      components/         containes the application components
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      environments        contains environments templates files (see the advanced template)
-      mail/               contains view files for e-mails
-      migrations/         contains the migrations scripts
-      models/             contains model classes
-      modules/            contains de application modules
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      web/                contains the entry script and Web resources
+      + assets/             contains assets definition
+      + components/         containes the application components
+      + commands/           contains console commands (controllers)
+      - config/             contains application configurations
+        * routes/           contains the routes configurations files
+      + environments        contains environments templates files (see the advanced template)
+      + mail/               contains view files for e-mails
+      + migrations/         contains the migrations scripts
+      + models/             contains model classes
+      + modules/            contains de application modules
+      + runtime/            contains files generated during runtime
+      + tests/              contains various tests for the basic application
+      + vendor/             contains dependent 3rd-party packages
+      + web/                contains the entry script and Web resources
 
 
 REQUIREMENTS
@@ -134,3 +135,17 @@ O model `User.php` já foi gerado pelo GII, porém, foi adicionado algumas coisa
 
 All models **MUST** extend the `app\components\ModelBase` class. See it for more implementation details.
 
+### API Routes
+
+All your API routes must be within `config/routes`. The following code is the already configured route of users:
+
+```php
+return [
+    [
+        'class' => 'yii\rest\UrlRule',
+        'controller' => 'v1/system/users',
+        'tokens' => ['{id}' => '<id:[\\w-]+>'],
+        'pluralize' => false,
+    ]
+];
+```
