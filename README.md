@@ -47,7 +47,7 @@ at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 You can then install this project template using the following command:
 
 ~~~
-php composer.phar create-project --prefer-dist dersonsena/yii2-app-restapi api-app
+php composer create-project —-prefer-dist —-stability=dev dersonsena/yii2-app-restapi path-name
 ~~~
 
 Now you should be able to access the application through the following URL, assuming `basic` is the directory
