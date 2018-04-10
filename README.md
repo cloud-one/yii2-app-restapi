@@ -195,6 +195,18 @@ $behaviors['authenticator'] = [
 ]
 ```
 
+When uncommenting these lines and trying to rerun the list of users, you should return a message as below:
+
+```json
+{
+    "name": "Unauthorized",
+    "message": "Your request was made with invalid credentials.",
+    "code": 0,
+    "status": 401,
+    "type": "yii\\web\\UnauthorizedHttpException"
+}
+```
+
 **NOTES:** If you want some action to be open, that is, do not authenticate to the API, just add inside the `$excepts` array.
 
 For more details on REST authentication with Yii, see the [Official Framework Documentation](https://www.yiiframework.com/doc/guide/2.0/en/rest-authentication).
