@@ -2,7 +2,8 @@
 
 namespace app\components;
 
-use app\components\behaviors\DbAttributesFilterBehavior;
+use app\components\behaviors\DateTimeColumnsBehavior;
+use app\components\behaviors\DecimalColumnsBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -67,16 +68,19 @@ class ModelBase extends ActiveRecord
     {
         return [
             [
-                'class' => DbAttributesFilterBehavior::className(),
+                'class' => DateTimeColumnsBehavior::class
             ],
             [
-                'class' => TimestampBehavior::className(),
+                'class' => DecimalColumnsBehavior::class
+            ],
+            [
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => $this->getCreatedAtAttribute(),
                 'updatedAtAttribute' => $this->getUpdatedAtAttribute(),
                 'value' => new Expression('NOW()'),
             ],
             [
-                'class' => BlameableBehavior::className(),
+                'class' => BlameableBehavior::class,
                 'createdByAttribute' => $this->getCreatedByAttribute(),
                 'updatedByAttribute' => $this->getUpdatedByAttribute()
             ]

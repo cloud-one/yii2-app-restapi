@@ -9,21 +9,18 @@ use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\db\ColumnSchema;
 
-class DbAttributesFilterBehavior extends Behavior
+class DateTimeColumnsBehavior extends Behavior
 {
-    /**
-     * @inheritdoc
-     */
     public function events()
     {
         return [
-            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
-            ActiveRecord::EVENT_BEFORE_INSERT => 'filterData',
-            ActiveRecord::EVENT_BEFORE_UPDATE => 'filterData',
+            ActiveRecord::EVENT_AFTER_FIND => 'afterFindEvent',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'insertUpdateEvent',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'insertUpdateEvent',
         ];
     }
 
-    public function afterFind(Event $event)
+    public function afterFindEvent(Event $event)
     {
         /** @var Formatter $formatter */
         $formatter = Yii::$app->formatter;
@@ -42,14 +39,10 @@ class DbAttributesFilterBehavior extends Behavior
                     $this->owner->{$column->name} = $formatter->asDatetime($this->owner->{$column->name});
                 }
             }
-
-            if ($this->isDecimalColumn($column)) {
-                $this->owner->{$column->name} = $formatter->asDecimal($this->owner->{$column->name});
-            }
         }
     }
 
-    public function filterData(Event $event)
+    public function insertUpdateEvent(Event $event)
     {
         /** @var Formatter $formatter */
         $formatter = Yii::$app->formatter;
@@ -59,10 +52,6 @@ class DbAttributesFilterBehavior extends Behavior
         foreach ($tableColumns as $column) {
             if (empty($this->owner->{$column->name})) {
                 continue;
-            }
-
-            if ($this->isDecimalColumn($column) && $this->isDecimalBRFormat($column)) {
-                $this->owner->{$column->name} = $formatter->asDecimalUS($this->owner->{$column->name});
             }
 
             if ($this->isDateColumn($column)) {
@@ -84,17 +73,6 @@ class DbAttributesFilterBehavior extends Behavior
     }
 
     /**
-     * Metodo que verifica se a coluna informada e do tipo Double/Decimal
-     * @param ColumnSchema $column
-     * @return bool
-     */
-    private function isDecimalColumn(ColumnSchema $column)
-    {
-        return in_array($column->type, ['decimal','double','float','real','numeric']);
-    }
-
-    /**
-     * Metodo que verifica se a coluna informada e do tipo Date
      * @param ColumnSchema $column
      * @return bool
      */
@@ -104,27 +82,15 @@ class DbAttributesFilterBehavior extends Behavior
     }
 
     /**
-     * Metodo que verifica se a coluna informada e do tipo Datetime
      * @param ColumnSchema $column
      * @return bool
      */
     private function isDateTimeColumn(ColumnSchema $column)
     {
-        return in_array($column->type, ['datetime','timestamp']);
+        return in_array($column->type, ['datetime', 'timestamp']);
     }
 
     /**
-     * Metodo que verifica se o valor da coluna e do formato Brasileiro
-     * @param ColumnSchema $column
-     * @return bool
-     */
-    private function isDecimalBRFormat(ColumnSchema $column)
-    {
-        return (strstr($this->owner->{$column->name}, ',') !== false);
-    }
-
-    /**
-     * Metodo que verifica se uma data ou um datetime da coluna e do formato Brasileiro
      * @param ColumnSchema $column
      * @return bool
      */

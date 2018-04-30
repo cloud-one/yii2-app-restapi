@@ -25,7 +25,7 @@ abstract class BaseController extends ActiveController
 
         unset($behaviors['authenticator']);
 
-        $behaviors['authenticator'] = [
+        /*$behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
             'except' => $excepts
         ];
@@ -33,7 +33,7 @@ abstract class BaseController extends ActiveController
         $behaviors['jsxValidator'] = [
             'class' => JsxValidator::class,
             'except' => $excepts
-        ];
+        ];*/
 
         $behaviors['contentNegotiator'] = [
             'class' => 'yii\filters\ContentNegotiator',
