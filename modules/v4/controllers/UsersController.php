@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\v1\modules\system\controllers;
+namespace app\modules\v4\controllers;
 
 use app\components\BaseController;
 
