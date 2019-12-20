@@ -3,7 +3,7 @@
 return [
     [
         'class' => 'yii\rest\UrlRule',
-        'controller' => 'v1/system/users',
+        'controller' => 'v4/system/users',
         'tokens' => ['{id}' => '<id:[\\w-]+>'],
         'pluralize' => false,
     ]
