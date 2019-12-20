@@ -13,12 +13,7 @@ $config = [
     ],
     'modules' => [
         'v4' => [
-            'class' => 'app\modules\v4\V4Module',
-            'modules' => [
-                'system' => [
-                    'class' => 'app\modules\v4\modules\system\SystemModule',
-                ],
-            ]
+            'class' => 'app\modules\v4\V4Module'
         ],
     ],
     'components' => [
