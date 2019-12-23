@@ -20,6 +20,9 @@ $config = [
         'request' => [
             'cookieValidationKey' => 'e_X3OrcfNKOz4Dymvgkeg9vRERXiX8oA',
         ],
+        'response' => [
+          'format' =>  \yii\web\Response::FORMAT_JSON
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
