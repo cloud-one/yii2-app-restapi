@@ -78,7 +78,7 @@ class LeadsActivation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'new_loan_apr', 'name_first', 'name_last', 'name_first_soundex', 'name_last_soundex', 'address', 'address2', 'city', 'state', 'zip', 'phone', 'year', 'make', 'model', 'car_id', 'ecar_id', 'etrim_id', 'model_id', 'style_id', 'vehicle_id', 'trim_id', 'our_offer', 'value_rough', 'value_average', 'value_clean', 'score', 'notes', 'activation_code', 'custom1', 'custom2', 'custom3', 'custom4', 'custom5', 'marketing_method', 'current_loan_type', 'current_loan_remaining_months', 'current_payment', 'new_year', 'new_make', 'new_model', 'new_trim', 'new_ecar_id', 'new_etrim_id', 'new_vehicle_id', 'new_trim_id', 'new_loan_type', 'new_loan_months', 'new_loan_payment', 'new_loan_down_payment', 'phone_2', 'vin', 'email'], 'required'],
+            [['campaign_id'], 'required'],
             [['campaign_id', 'phone', 'car_id', 'ecar_id', 'etrim_id', 'model_id', 'style_id', 'vehicle_id', 'trim_id', 'score', 'current_loan_remaining_months', 'new_ecar_id', 'new_etrim_id', 'new_vehicle_id', 'new_trim_id', 'new_loan_months', 'phone_2'], 'integer'],
             [['new_loan_apr', 'our_offer', 'value_rough', 'value_average', 'value_clean', 'current_payment', 'new_loan_payment', 'new_loan_down_payment'], 'number'],
             [['year', 'daterange', 'new_year'], 'safe'],

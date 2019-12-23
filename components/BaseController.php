@@ -49,7 +49,7 @@ abstract class BaseController extends ActiveController
                 'Access-Control-Allow-Origin' => ['*'],
                 'Access-Control-Request-Headers' => ['*'],
                 'Access-Control-Max-Age' => 3600,
-                'Access-Control-Allow-Credentials' => true,
+                'Access-Control-Allow-Credentials' => false,
                 'Access-Control-Request-Method' => [
                     'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'
                 ],
