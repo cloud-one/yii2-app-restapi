@@ -22,9 +22,17 @@ class UsersController extends BaseController
 
     public function actionIndex() {
         $this->serializer['defaultFields'] = ['user_id', 'name'];
+    
+        $params = \Yii::$app->request->queryParams;
+
+        $query = Users::find();
+
+        if (!empty($params) && array_key_exists('dealer_id' , $params)) {
+            $query->where('parent_id ='.$params['dealer_id']);
+        }
 
         $activeData = new ActiveDataProvider([
-            'query' => Users::find(),
+            'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 50,
                 'pageSizeLimit' => [1, 100],
