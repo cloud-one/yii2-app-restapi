@@ -3,6 +3,8 @@
 namespace app\modules\v4\controllers;
 
 use yii\data\ActiveDataProvider;
+use yii\web\BadRequestHttpException;
+
 use app\components\BaseController;
 use app\models\Users;
 
@@ -23,13 +25,14 @@ class UsersController extends BaseController
     public function actionIndex() {
         $this->serializer['defaultFields'] = ['user_id', 'name'];
     
-        $params = \Yii::$app->request->queryParams;
+        $headers = \Yii::$app->request->headers;
+        $dealer_id = $headers->get('dealer_id');
 
-        $query = Users::find();
-
-        if (!empty($params) && array_key_exists('dealer_id' , $params)) {
-            $query->where('parent_id ='.$params['dealer_id']);
+        if (empty($dealer_id)) {
+            throw new BadRequestHttpException('dealer_id is required');
         }
+
+        $query = Users::find()->where('parent_id ='.$dealer_id);
 
         $activeData = new ActiveDataProvider([
             'query' => $query,
