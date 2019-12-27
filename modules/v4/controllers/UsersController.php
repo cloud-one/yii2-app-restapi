@@ -2,11 +2,11 @@
 
 namespace app\modules\v4\controllers;
 
-use yii\data\ActiveDataProvider;
-use yii\web\BadRequestHttpException;
-
 use app\components\BaseController;
 use app\models\Users;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\BadRequestHttpException;
 
 class UsersController extends BaseController
 {
@@ -15,17 +15,19 @@ class UsersController extends BaseController
         'class' => 'app\components\FieldsSerializer'
     ];
 
-    public function actions() {
+    public function actions()
+    {
         $actions = parent::actions();
         unset($actions['index']);
         unset($actions['view']);
         return $actions;
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $this->serializer['defaultFields'] = ['user_id', 'name'];
     
-        $headers = \Yii::$app->request->headers;
+        $headers = Yii::$app->request->headers;
         $dealer_id = $headers->get('dealer_id');
 
         if (empty($dealer_id)) {
@@ -50,7 +52,8 @@ class UsersController extends BaseController
         return $activeData;
     }
 
-    public function actionView($id) {
+    public function actionView($id)
+    {
         $this->serializer['defaultFields'] = [
           'user_id',
           'name_first',

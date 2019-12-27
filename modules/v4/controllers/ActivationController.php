@@ -12,7 +12,8 @@ class ActivationController extends BaseController
         'class' => 'app\components\FieldsSerializer'
     ];
 
-    public function actions() {
+    public function actions()
+    {
         $actions = parent::actions();
         unset($actions['index']);
         unset($actions['view']);
@@ -20,7 +21,8 @@ class ActivationController extends BaseController
         return $actions;
     }
 
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $bodyParams = \Yii::$app->request->bodyParams;
         // $tableName = LeadsActivation::tableName();
         // $leadsActivation = new LeadsActivation();
