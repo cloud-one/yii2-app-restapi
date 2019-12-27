@@ -30,11 +30,15 @@ class UsersController extends BaseController
         $headers = Yii::$app->request->headers;
         $dealer_id = $headers->get('dealer_id');
 
-        if (empty($dealer_id)) {
+        if (!strlen($dealer_id)) {
             throw new BadRequestHttpException('dealer_id is required');
         }
 
-        $query = Users::find()->where('parent_id ='.$dealer_id);
+        if (!ctype_digit($dealer_id)) {
+            throw new BadRequestHttpException('dealer_id has incorrect value');
+        }
+
+        $query = Users::find()->where(['parent_id' => $dealer_id]);
 
         $activeData = new ActiveDataProvider([
             'query' => $query,
