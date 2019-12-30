@@ -1,0 +1,96 @@
+openapi: 3.0.0
+servers:
+  - description: Test
+    url: https://api.cloudone.com/v3/{ClientID}
+    variables:
+      ClientID:
+        default: "CLIENT_ID"
+        description: Your Client ID is a 6 digit number located in XXXXXXX.
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Simple Inventory API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  '/activation/add.json':
+    post:
+      tags:
+        - activation
+      operationId: addInventory
+      description: You are able to add, upload, and delete activation for your campaigns.
+      parameters:
+        - name: api_key
+          in: query
+          description: Your API Key
+          required: true
+          schema:
+            type: string
+            example: API_KEY
+        - name: campaign_id
+          in: query
+          description: Campaign ID or External Campaign ID
+          required: true
+          schema:
+            type: string
+            example: 4
+        - name: custom_variable
+          in: query
+          description: Changes activation code label on script if provided
+          schema:
+            type: string
+            example: Pin Code
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        description: Inventory item to add
+components:
+  schemas:
+    InventoryItem:
+      type: object
+      required:
+        - id
+        - name
+        - manufacturer
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Widget Adapter
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        manufacturer:
+          $ref: '#/components/schemas/Manufacturer'
+    Manufacturer:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: ACME Corporation
+        homePage:
+          type: string
+          format: url
+          example: 'https://www.acme-corp.com'
+        phone:
+          type: string
+          example: 408-867-5309
+      type: object
