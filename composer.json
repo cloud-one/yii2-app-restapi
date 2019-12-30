@@ -18,7 +18,9 @@
         "ext-intl": "*",
         "ext-mbstring": "*",
         "yiisoft/yii2": "~2.0.14",
-        "yiisoft/yii2-swiftmailer": "~2.0.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
+        "cebe/yii2-openapi": "@beta",
+        "cebe/php-openapi": "@beta"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",
