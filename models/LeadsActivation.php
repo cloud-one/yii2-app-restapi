@@ -78,7 +78,7 @@ class LeadsActivation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id'], 'required'],
+            [['campaign_id', 'activation_code'], 'required'],
             [['campaign_id', 'phone', 'car_id', 'ecar_id', 'etrim_id', 'model_id', 'style_id', 'vehicle_id', 'trim_id', 'score', 'current_loan_remaining_months', 'new_ecar_id', 'new_etrim_id', 'new_vehicle_id', 'new_trim_id', 'new_loan_months', 'phone_2'], 'integer'],
             [['new_loan_apr', 'our_offer', 'value_rough', 'value_average', 'value_clean', 'current_payment', 'new_loan_payment', 'new_loan_down_payment'], 'number'],
             [['year', 'daterange', 'new_year'], 'safe'],
