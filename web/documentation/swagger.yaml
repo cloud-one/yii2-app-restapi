@@ -1,96 +1,226 @@
 openapi: 3.0.0
 servers:
-  - description: Test
-    url: https://api.cloudone.com/v3/{ClientID}
+  - description: Base URL template
+    url: '{protocol}://{domain}/{version}'
     variables:
-      ClientID:
-        default: "CLIENT_ID"
-        description: Your Client ID is a 6 digit number located in XXXXXXX.
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+        description: 'The CloudOne API is served over HTTPS. To ensure data privacy, unencrypted HTTP is not supported.'
+      domain:
+        default: 'api.cloudone.com'
+      version:
+        default: 'v4'
 info:
-  description: This is a simple API
-  version: "1.0.0"
-  title: Simple Inventory API
+  title: 'CloudOne API Service'
+  description: "The CloudOne API allows you to interact with our call center including creating dealer accounts and campaigns.
+    \n\n
+    Since the API is based on REST principles, it's very easy to write and test applications. You can use your browser to access URLs, and you can use pretty much any HTTP client in any programming language to interact with the API.
+    \n\n
+    All API calls use API key and IP restriction. Prior to use you will need to supply your IP addresses to your account representative so they can be added to your account."
+  version: '1.0.0'
   contact:
     email: you@your-company.com
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+security:
+  - client_id: []
+  - api_key: []
 paths:
-  '/activation/add.json':
+  '/activation':
     post:
       tags:
         - activation
-      operationId: addInventory
-      description: You are able to add, upload, and delete activation for your campaigns.
+      operationId: addActivation
+      description: 'You are able to add activation for your campaigns.'
       parameters:
-        - name: api_key
-          in: query
-          description: Your API Key
-          required: true
-          schema:
-            type: string
-            example: API_KEY
         - name: campaign_id
-          in: query
-          description: Campaign ID or External Campaign ID
+          in: header
+          description: 'Campaign ID or External Campaign ID'
           required: true
           schema:
             type: string
             example: 4
         - name: custom_variable
-          in: query
-          description: Changes activation code label on script if provided
+          in: header
+          description: 'Changes activation code label on script if provided'
           schema:
             type: string
-            example: Pin Code
+            example: 'Pin Code'
       responses:
-        '201':
-          description: item created
+        '200':
+          description: 'Activation codes have been processed successfully'
+          content:
+            application/json:
+              example: 
+                success: 'yes'
+                total_added: 20
         '400':
-          description: 'invalid input, object invalid'
-        '409':
-          description: an existing item already exists
+          description: 'Invalid input, bad request'
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign not found'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InventoryItem'
-        description: Inventory item to add
+              type: object
+              properties:
+                codes:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LeadsActivation'
+              example: {
+	              "codes": [
+                  {
+                    "activation_code": "1234567",
+                    "name_first": "Test",
+                    "name_last": "Testington",
+                    "address": "123 Fake St",
+                    "city": "Portland",
+                    "state": "OR",
+                    "zip": "97202"
+                  },
+                  {
+                    "activation_code": "7654321",
+                    "name_first": "Fake",
+                    "name_last": "Fakington",
+                    "address": "321 Test Ave",
+                    "address2": "Apt 123",
+                    "city": "Schenectady",
+                    "state": "NY",
+                    "zip": "12345",
+                    "year": "2010",
+                    "make": "Honda",
+                    "model": "Civic",
+                    "score": "750",
+                    "our_offer": "7500",
+                    "value_rough": "7331",
+                    "value_average": "8148",
+                    "value_clean": "8413",
+                    "custom1": "Custom Data Here",
+                    "custom2": "Custom Data Here",
+                    "custom3": "Custom Data Here",
+                    "custom4": "Custom Data Here",
+                    "custom5": "Custom Data Here"
+                  }
+                ]
+              }
+        description: 'Activation codes to add'
 components:
+  securitySchemes:
+    client_id:
+      type: apiKey
+      in: header
+      name: client_id
+      description: 'Your Client ID is a 6 digit number located in XXXXXXX.'
+    api_key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: 'Your API Key can be found in the API section of your account dashboard.'
+  responses:
+    UnauthorizedError:
+      description: 'Invalid client_id or api_key'
+      headers:
+        client_id:
+          $ref: "#/components/securitySchemes/client_id"
+        api_key:
+          $ref: "#/components/securitySchemes/api_key"
   schemas:
-    InventoryItem:
+    LeadsActivation:
       type: object
       required:
-        - id
-        - name
-        - manufacturer
-        - releaseDate
+        - activation_code
       properties:
-        id:
+        activation_code:
           type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        name:
+          example: '7654321'
+        name_first:
           type: string
-          example: Widget Adapter
-        releaseDate:
+          maxLength: 50
+          example: 'Fake'
+        name_last:
           type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        manufacturer:
-          $ref: '#/components/schemas/Manufacturer'
-    Manufacturer:
-      required:
-        - name
-      properties:
-        name:
+          maxLength: 50
+          example: 'Fakington'
+        address:
           type: string
-          example: ACME Corporation
-        homePage:
+          maxLength: 100
+          example: '321 Test Ave'
+        address2:
           type: string
-          format: url
-          example: 'https://www.acme-corp.com'
+          maxLength: 100
+          example: 'Apt 123'
+        city:
+          type: string
+          maxLength: 50
+          example: 'Schenectady'
+        state:
+          type: string
+          maxLength: 2
+          example: 'NY'
+        zip:
+          type: integer
+          maximum: 99999
+          example: 12345
         phone:
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 1234567890
+        year:
+          type: integer
+          maximum: 9999
+          example: 2010
+        make:
           type: string
-          example: 408-867-5309
-      type: object
+          maxLength: 50
+          example: 'Honda'
+        model:
+          type: string
+          maxLength: 50
+          example: 'Civic'
+        score:
+          type: number
+          example: 750
+        our_offer:
+          type: number
+          maximum: 999999999
+          example: 7500
+        value_rough:
+          type: number
+          maximum: 999999999
+          example: 7331
+        value_average:
+          type: number
+          maximum: 999999999
+          example: 8148
+        value_clean:
+          type: number
+          maximum: 999999999
+          example: 8413
+        custom1:
+          type: string
+          maxLength: 255
+          example: 'Custom Data Here'
+        custom2:
+          type: string
+          maxLength: 255
+          example: 'Custom Data Here'
+        custom3:
+          type: string
+          maxLength: 255
+          example: 'Custom Data Here'
+        custom4:
+          type: string
+          maxLength: 255
+          example: 'Custom Data Here'
+        custom5:
+          type: string
+          maxLength: 255
+          example: 'Custom Data Here'
+        vin:
+          type: string
+          maxLength: 17
