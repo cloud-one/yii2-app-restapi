@@ -9,6 +9,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\Cors;
 use yii\rest\ActiveController;
 use yii\web\Response;
+use yii\web\UnauthorizedHttpException;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -102,11 +103,11 @@ abstract class BaseController extends ActiveController
         ])->one();
 
         if (empty($client)) {
-            throw new BadRequestHttpException('Invalid client_id or api_key');
+            throw new UnauthorizedHttpException('Invalid client_id or api_key');
         }
 
         if (!empty($client) && $client->status != 1) {
-            throw new BadRequestHttpException('Your account is inactive');
+            throw new UnauthorizedHttpException('Your account is inactive');
         }
     }
 
