@@ -71,42 +71,44 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/LeadsActivation'
-              example: {
-	              "codes": [
-                  {
-                    "activation_code": "1234567",
-                    "name_first": "Test",
-                    "name_last": "Testington",
-                    "address": "123 Fake St",
-                    "city": "Portland",
-                    "state": "OR",
-                    "zip": "97202"
-                  },
-                  {
-                    "activation_code": "7654321",
-                    "name_first": "Fake",
-                    "name_last": "Fakington",
-                    "address": "321 Test Ave",
-                    "address2": "Apt 123",
-                    "city": "Schenectady",
-                    "state": "NY",
-                    "zip": "12345",
-                    "year": "2010",
-                    "make": "Honda",
-                    "model": "Civic",
-                    "score": "750",
-                    "our_offer": "7500",
-                    "value_rough": "7331",
-                    "value_average": "8148",
-                    "value_clean": "8413",
-                    "custom1": "Custom Data Here",
-                    "custom2": "Custom Data Here",
-                    "custom3": "Custom Data Here",
-                    "custom4": "Custom Data Here",
-                    "custom5": "Custom Data Here"
-                  }
-                ]
-              }
+              example: 
+                {
+                  "codes":
+                  [
+                    {
+                      "activation_code": "1234567",
+                      "name_first": "Test",
+                      "name_last": "Testington",
+                      "address": "123 Fake St",
+                      "city": "Portland",
+                      "state": "OR",
+                      "zip": "97202"
+                    },
+                    {
+                      "activation_code": "7654321",
+                      "name_first": "Fake",
+                      "name_last": "Fakington",
+                      "address": "321 Test Ave",
+                      "address2": "Apt 123",
+                      "city": "Schenectady",
+                      "state": "NY",
+                      "zip": "12345",
+                      "year": "2010",
+                      "make": "Honda",
+                      "model": "Civic",
+                      "score": "750",
+                      "our_offer": "7500",
+                      "value_rough": "7331",
+                      "value_average": "8148",
+                      "value_clean": "8413",
+                      "custom1": "Custom Data Here",
+                      "custom2": "Custom Data Here",
+                      "custom3": "Custom Data Here",
+                      "custom4": "Custom Data Here",
+                      "custom5": "Custom Data Here"
+                    }
+                  ]
+                }
         description: 'Activation codes to add'
 components:
   securitySchemes:
