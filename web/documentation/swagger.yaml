@@ -30,7 +30,8 @@ paths:
   '/activation':
     post:
       tags:
-        - activation
+        - hidden
+        # - activation
       operationId: addActivation
       description: 'You are able to add activation for your campaigns.'
       parameters:
