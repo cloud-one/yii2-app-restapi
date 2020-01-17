@@ -178,7 +178,7 @@ paths:
             example: 123456
       responses:
         '200':
-          description: 'A list of users'
+          description: 'Returns a list of users'
           content:
             application/json:
               example: 
@@ -195,7 +195,43 @@ paths:
         '400':
           $ref: "#/components/responses/BadRequestError"
         '401':
-           $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/UnauthorizedError"
+  '/users/{id}':
+    get:
+      tags:
+        - users
+      operationId: getUserById
+      description: 'You are able to get user info.'
+      parameters:
+        - name: id
+          in: path
+          description: 'The user ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Returns user info'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example: 
+                {
+                  "user_id": "654321",
+                  "name_first": "Test",
+                  "name_last": "Testington",
+                  "user_name": "test",
+                  "phone_cell": "1234567890",
+                  "phone_work": "9876543210",
+                  "phone_work_ext": "123"
+                }
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'User not found'
+        
 components:
   securitySchemes:
     client_id:
@@ -316,3 +352,53 @@ components:
         vin:
           type: string
           maxLength: 17
+
+    User:
+      type: object
+      required:
+        - name_first
+        - name_last
+        - user_name
+        - password
+      properties:
+        name_first:
+          description: 'The users first name'
+          type: string
+          maxLength: 50
+          example: 'Test'
+        name_last:
+          description: 'The users last name'
+          type: string
+          maxLength: 50
+          example: 'Testington'
+        user_name:
+          description: 'The username'
+          type: string
+          maxLength: 50
+          example: 'test'
+        password:
+          description: 'The password'
+          type: string
+          maxLength: 50
+          example: '123##'
+        phone_cell:
+          description: 'The users cell phone'
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 1234567890
+        phone_work:
+          description: 'The users work phone'
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 9876543210
+        phone_work_ext:
+          description: 'The users work phone extension'
+          type: integer
+          example: 123
+        email:
+          description: 'The users email'
+          type: string
+          maxLength: 100
+          example: 'test@example.com'
