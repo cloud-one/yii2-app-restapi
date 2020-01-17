@@ -34,10 +34,10 @@ paths:
       responses:
         '200':
           description: ''
-  '/activation':
+  '/activations':
     post:
       tags:
-        - activation
+        - Activation
       operationId: addActivation
       description: 'You are able to add activation for your campaigns.'
       parameters:
@@ -119,7 +119,7 @@ paths:
           description: 'Campaign not found'
     delete:
       tags:
-        - activation
+        - Activation
       operationId: deleteActivation
       description: 'You are able to delete activation for your campaigns.'
       parameters:
@@ -165,7 +165,7 @@ paths:
   '/users':
     get:
       tags:
-        - users
+        - User
       operationId: getUsers
       description: 'You are able to get list of users for your dealers.'
       parameters:
@@ -196,12 +196,12 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-  '/users/{id}':
+  '/user/{id}':
     get:
       tags:
-        - users
+        - User
       operationId: getUserById
-      description: 'You are able to get user info.'
+      description: 'You are able to get user info by id.'
       parameters:
         - name: id
           in: path
@@ -231,6 +231,50 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'User not found'
+  '/user':
+    post:
+      tags:
+        - User
+      operationId: addUser
+      description: 'You are able to add user.'
+      parameters:
+        - name: dealer_id
+          in: header
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 654321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example: 
+              {
+                "name_first": "Test",
+                "name_last": "Testington",
+                "user_name": "test",
+                "password": "123##",
+                "phone_cell": "1234567890",
+                "phone_work": "9876543210",
+                "phone_work_ext": "123",
+                "email": "test@example.com"
+              }
+        description: 'User info'
+      responses:
+        '200':
+          description: 'User have been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "user_id": "54321"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
         
 components:
   securitySchemes:
