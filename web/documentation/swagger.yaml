@@ -162,6 +162,40 @@ paths:
            $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Campaign not found'
+  '/users':
+    get:
+      tags:
+        - users
+      operationId: getUsers
+      description: 'You are able to get list of users for your dealers.'
+      parameters:
+        - name: dealer_id
+          in: header
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'A list of users'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "user_id": "654321",
+                    "name": "Fake Fakington"
+                  },
+                  {
+                    "user_id": "654322",
+                    "name": "Test Testington"
+                  }
+                ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
 components:
   securitySchemes:
     client_id:
@@ -174,6 +208,7 @@ components:
       in: header
       name: api_key
       description: 'Your API Key can be found in the API section of your account dashboard.'
+
   responses:
     UnauthorizedError:
       description: 'Invalid client_id or api_key'
@@ -184,6 +219,7 @@ components:
           $ref: "#/components/securitySchemes/api_key"
     BadRequestError:
       description: 'Invalid input, bad request'
+
   schemas:
     LeadsActivation:
       type: object
