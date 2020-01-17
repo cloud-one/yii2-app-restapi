@@ -7,6 +7,7 @@ use app\models\Users;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 class UsersController extends BaseController
 {
@@ -68,6 +69,12 @@ class UsersController extends BaseController
           'phone_work_ext'
         ];
 
-        return Users::findOne($id);
+        $user = Users::findOne($id);
+
+        if (empty($user)) {
+          throw new NotFoundHttpException('User not found');
+        }
+
+        return $user;
     }
 }
