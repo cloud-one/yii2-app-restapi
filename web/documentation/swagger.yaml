@@ -230,7 +230,7 @@ paths:
         description: 'User info'
       responses:
         '200':
-          description: 'User have been added successfully'
+          description: 'User has been added successfully'
           content:
             application/json:
               example: 
@@ -281,7 +281,7 @@ paths:
       tags:
         - User
       operationId: updateUser
-      description: 'You are able to update user.'
+      description: 'You are able to update user by id.'
       parameters:
         - name: id
           in: path
@@ -309,7 +309,7 @@ paths:
         description: 'User info'
       responses:
         '200':
-          description: 'User have been updated successfully'
+          description: 'User has been updated successfully'
           content:
             application/json:
               example: 
@@ -328,6 +328,36 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
            $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'User not found'
+    delete:
+      tags:
+        - User
+      operationId: deleteUser
+      description: 'You are able to delete user by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'The user ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'User has been deleted successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "user_id": "54321"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'User not found'
 
 components:
   securitySchemes:
