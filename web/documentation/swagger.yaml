@@ -34,6 +34,7 @@ paths:
       responses:
         '200':
           description: ''
+
   '/activations':
     post:
       tags:
@@ -162,6 +163,7 @@ paths:
            $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Campaign not found'
+
   '/users':
     get:
       tags:
@@ -196,42 +198,6 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-  '/user/{id}':
-    get:
-      tags:
-        - User
-      operationId: getUserById
-      description: 'You are able to get user info by id.'
-      parameters:
-        - name: id
-          in: path
-          description: 'The user ID'
-          required: true
-          schema:
-            type: string
-            example: 123456
-      responses:
-        '200':
-          description: 'Returns user info'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              example: 
-                {
-                  "user_id": "654321",
-                  "name_first": "Test",
-                  "name_last": "Testington",
-                  "user_name": "test",
-                  "phone_cell": "1234567890",
-                  "phone_work": "9876543210",
-                  "phone_work_ext": "123"
-                }
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-        '404':
-          description: 'User not found'
-  '/user':
     post:
       tags:
         - User
@@ -275,7 +241,94 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
            $ref: "#/components/responses/UnauthorizedError"
-        
+
+  '/users/{id}':
+    get:
+      tags:
+        - User
+      operationId: getUserById
+      description: 'You are able to get user info by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'The user ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Returns user info'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example: 
+                {
+                  "user_id": "654321",
+                  "name_first": "Test",
+                  "name_last": "Testington",
+                  "user_name": "test",
+                  "phone_cell": "1234567890",
+                  "phone_work": "9876543210",
+                  "phone_work_ext": "123"
+                }
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'User not found'
+    put:
+      tags:
+        - User
+      operationId: updateUser
+      description: 'You are able to update user.'
+      parameters:
+        - name: id
+          in: path
+          description: 'The user ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              {
+                "name_first": "Test",
+                "name_last": "Testington",
+                "user_name": "test",
+                "password": "123##",
+                "phone_cell": "9876543210",
+                "phone_work": "8765432109",
+                "phone_work_ext": "9876543210",
+                "email": "test@example.com"
+              }
+        description: 'User info'
+      responses:
+        '200':
+          description: 'User have been updated successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "user_id": "54321",
+                  "name_first": "Test",
+                  "name_last": "Testington",
+                  "user_name": "test",
+                  "password": "123##",
+                  "phone_cell": "9876543210",
+                  "phone_work": "8765432109",
+                  "phone_work_ext": "9876543210",
+                  "email": "test@example.com"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+
 components:
   securitySchemes:
     client_id:

@@ -7,7 +7,7 @@ use app\models\LeadsActivation;
 use Yii;
 use yii\web\BadRequestHttpException;
 
-class ActivationController extends BaseController
+class ActivationsController extends BaseController
 {
     public $modelClass = 'app\models\LeadsActivation';
     public $serializer = [
