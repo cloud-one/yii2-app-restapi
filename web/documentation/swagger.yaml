@@ -13,6 +13,7 @@ servers:
         default: 'api.cloudone.com'
       version:
         default: 'v4'
+
 info:
   title: 'CloudOne API Service'
   description: "The CloudOne API allows you to interact with our call center including creating dealer accounts and campaigns.
@@ -23,9 +24,22 @@ info:
   version: '1.0.0'
   contact:
     email: you@your-company.com
+
 security:
   - client_id: []
   - api_key: []
+
+tags:
+  - name: hidden
+    description: 'Only for internal use'
+  - name: Activation
+    description: 'You are able to add and delete activation for your campaigns.'
+  - name: Alert
+    description: "You are able to add, list and delete alerts for your campaigns.\n\n
+      If there is a CRM that you would like added please email support@cloudone.com"
+  - name: User
+    description: 'You are able to add, list, get info, update and delete users for your dealers.'
+
 paths:
   '/internal-example':
     get:
@@ -157,6 +171,269 @@ paths:
               example: 
                 success: 'yes'
                 total_deleted: 2
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign not found'
+
+  '/alerts':
+    get:
+      tags:
+        - Alert
+      operationId: getAlerts
+      description: 'You are able to get list of alerts for your campaigns.'
+      parameters:
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Returns a list of alerts'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "alert_id": "86804",
+                    "category": "CRM Post",
+                    "alert_type": "VinSolutions",
+                    "destination": "123456",
+                    "status_types": {
+                      "hot": "1",
+                      "warm": "1",
+                      "cold": "1",
+                      "other": "0"
+                    }
+                  },
+                  {
+                    "alert_id": "86803",
+                    "category": "Email",
+                    "alert_type": "HTML Email",
+                    "destination": "test@example.com",
+                    "status_types": {
+                      "hot": "1",
+                      "warm": "1",
+                      "cold": "1",
+                      "other": "0"
+                    }
+                  },
+                  {
+                    "alert_id": "86802",
+                    "category": "SMS",
+                    "alert_type": "SMS",
+                    "destination": "5035555555",
+                    "status_types": {
+                      "hot": "1",
+                      "warm": "0",
+                      "cold": "0",
+                      "other": "0"
+                    }
+                  },
+                  {
+                    "alert_id": "86801",
+                    "category": "CRM Email",
+                    "alert_type": "adf",
+                    "destination": "test2@example.com",
+                    "status_types": {
+                      "hot": "1",
+                      "warm": "0",
+                      "cold": "1",
+                      "other": "1"
+                    }
+                  }
+                ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign not found'
+    post:
+      tags:
+        - Alert
+      operationId: addAlerts
+      description: 'You are able to add alerts.'
+      parameters:
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                campaign:
+                  type: object
+                  properties:
+                    email_settings:
+                      type: object
+                      properties:
+                        from_name:
+                          type: string
+                          description: 'Campaign'
+                          example: 'ABC'
+                        from_email_address:
+                          type: string
+                          description: 'Campaign'
+                          format: email
+                          example: 'ABC@cloudone.com'
+                        email_subject:
+                          type: string
+                          description: 'Campaign'
+                          example: 'subject'
+                    alerts:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Alert'
+                lead:
+                  type: object
+                  properties:
+                    appointment_confirmation:
+                      type: boolean
+                      description: "\"1\" or \"0\" if you want CloudBDC to email Leads on the Customer's behalf"
+                      default: true
+                    appointment_reminder:
+                      type: boolean
+                      description: "\"1\" or \"0\" if you want CloudBDC to email or sms lead reminder on the Customer's behalf"
+                      default: true
+                    from_email_address:
+                      type: string
+                      description: 'This is the email that should show up when sending an email. eg. alerts@cloudbdc.com'
+                      format: email
+                      example: 'abccdf@cloudone.com'
+                    from_name:
+                      type: string
+                      description: 'This is the name that should show up when sending an email. eg. ABC Automotive'
+                      example: 'CloudOne'
+            example:
+              {
+                "campaign": {
+                  "email_settings": {
+                    "from_name": "ABC",
+                    "from_email_address": "ABC@cloudone.com",
+                    "email_subject": "subject"
+                  },
+                  "alerts":
+                  [
+                    {
+                      "category": "crm_email",
+                      "address": "test2@example.com",
+                      "type": "adf",
+                      "status_types": {
+                        "hot": "1",
+                        "warm": "0",
+                        "cold": "1",
+                        "other": "1"
+                      }
+                    },
+                    {
+                      "category": "sms",
+                      "name": "fake_name",
+                      "number": "5035555555",
+                      "status_types": {
+                        "hot": "1",
+                        "warm": "0",
+                        "cold": "0",
+                        "other": "0"
+                      }
+                    },
+                    {
+                      "category": "email",
+                      "address": "test@example.com",
+                      "type": "html"
+                    },
+                    {
+                      "category": "crm_post",
+                      "crm_dealer_id": "123456",
+                      "type": "VinSolutions"
+                    }
+                  ]
+                },
+                "lead": {
+                  "appointment_confirmation": "1",
+                  "appointment_reminder": "1",
+                  "from_email_address": "abccdf@cloudone.com",
+                  "from_name": "CloudOne"
+                }
+              }
+        description: 'Alert info'
+      responses:
+        '200':
+          description: 'Alerts have been added successfully'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "Error": "0",
+                    "Message": "Successfully created alert #86801 for test2@example.com. Alert type = adf and category = Crm Email",
+                    "Posted": {
+                      "category": "crm_email",
+                      "address": "test2@example.com",
+                      "type": "adf",
+                      "status_types": {
+                        "hot": "1",
+                        "warm": "0",
+                        "cold": "1",
+                        "other": "1"
+                      }
+                    }
+                  },
+                  {
+                    "Error": "0",
+                    "Message": "Successfully created alert #86802 for 5035555555. SMS number = 5035555555 and category = Sms",
+                    "Posted": {
+                      "category": "sms",
+                      "name": "fake_name",
+                      "number": "5035555555",
+                      "status_types": {
+                        "hot": "1",
+                        "warm": "0",
+                        "cold": "0",
+                        "other": "0"
+                      }
+                    }
+                  },
+                  {
+                    "Error": "0",
+                    "Message": "Successfully created alert #86803 for test@example.com. Alert type = html and category = Email",
+                    "Posted": {
+                      "category": "email",
+                      "address": "test@example.com",
+                      "type": "html"
+                    }
+                  },
+                  {
+                    "Error": "0",
+                    "Message": "Successfully created alert #86804 for . Alert type =  and category = Crm Post",
+                    "Posted": {
+                      "category": "crm_post",
+                      "crm_dealer_id": "123456",
+                      "type": "VinSolutions"
+                    }
+                  },
+                  {
+                    "Error": "0",
+                    "Message": "Created Lead Alert",
+                    "Posted": {
+                      "appointment_confirmation": "1",
+                      "appointment_reminder": "1",
+                      "from_email_address": "abccdf@cloudone.com",
+                      "from_name": "CloudOne"
+                    }
+                  }
+                ]
         '400':
           $ref: "#/components/responses/BadRequestError"
         '401':
@@ -384,6 +661,66 @@ components:
       description: 'Invalid input, bad request'
 
   schemas:
+    Alert:
+      type: object
+      required:
+        - category
+      properties:
+        category:
+          description: '"email", "sms", "crm_email", or "crm_post"'
+          type: string
+          maxLength: 100
+          example: 'crm_email'
+        status_types:
+          type: object
+          properties:
+            hot:
+              type: boolean
+              description: 'Flag to turn off or on.'
+              default: true
+            warm:
+              type: boolean
+              description: 'Flag to turn off or on.'
+              default: true
+            cold:
+              type: boolean
+              description: 'Flag to turn off or on.'
+              default: true
+            other:
+              type: boolean
+              description: 'Flag to turn off or on.'
+              default: false
+        address:
+          description: 'Required if category "email" or "crm_email"'
+          type: string
+          format: email
+          maxLength: 100
+          example: 'test2@example.com'
+        type:
+          description: |
+            \"text\" or \"html\" and required if category \"email\".
+
+            \"ADF\" and required if category \"crm_email\" or \"crm_post\".
+          type: string
+          maxLength: 30
+          example: 'adf'
+        name:
+          description: 'Required if category "sms"'
+          type: string
+          maxLength: 50
+          example: 'fake_name'
+        number:
+          description: 'Required if category "sms"'
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 5035555555
+        crm_dealer_id:
+          description: 'Required if category "crm_post"'
+          type: string
+          maxLength: 100
+          example: '123456'
+
     LeadsActivation:
       type: object
       required:
@@ -527,5 +864,6 @@ components:
         email:
           description: 'The users email'
           type: string
+          format: email
           maxLength: 100
           example: 'test@example.com'
