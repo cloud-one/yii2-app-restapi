@@ -441,6 +441,43 @@ paths:
         '404':
           description: 'Campaign not found'
 
+  '/alerts/{id}':
+    delete:
+      tags:
+        - Alert
+      operationId: deleteAlerts
+      description: 'You are able to delete alert by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Alert ID'
+          required: true
+          schema:
+            type: string
+            example: 572
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Alert has been deleted successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "alert_id": "572"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Alert or Campaign not found'
+
   '/users':
     get:
       tags:
