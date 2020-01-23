@@ -37,6 +37,9 @@ tags:
   - name: Alert
     description: "You are able to add, list and delete alerts for your campaigns.\n\n
       If there is a CRM that you would like added please email support@cloudone.com"
+
+  - name: Call
+    description: 'You are able get a list of calls.'
   - name: User
     description: 'You are able to add, list, get info, update and delete users for your dealers.'
 
@@ -478,6 +481,69 @@ paths:
         '404':
           description: 'Alert or Campaign not found'
 
+  '/calls':
+    get:
+      tags:
+        - Call
+      operationId: getCalls
+      description: 'You are able to get list of calls for your campaigns.'
+      parameters:
+        - name: phone_number
+          in: header
+          description: 'Phone (10 Digits Only)'
+          required: true
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 1234567890
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Returns a list of calls'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Call'
+              example: 
+                [
+                  {
+                    "call_id": "CB9dbadb21bdb4f535d44ae03253c3ebc5",
+                    "date": "2012-07-05 17:56:42",
+                    "from_phone": "9497273200",
+                    "to_phone": "9512214327",
+                    "direction": "inbound",
+                    "duration": "140",
+                    "recording": "https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/AB316c10acdba352350fade824befad268.mp3",
+                    "transcription": ""
+                  },
+                  {
+                    "call_id": "CDc33b7c06fc61b0224d405354f2016aa0",
+                    "date": "2012-07-06 15:57:26",
+                    "from_phone": "3109017215",
+                    "to_phone": "9512214327",
+                    "direction": "inbound",
+                    "duration": "83",
+                    "recording": "https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/CDd521166f04e52f11eae7f2fed874f606.mp3",
+                    "transcription": ""
+                  }
+                ]
+
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign not found'
+
   '/users':
     get:
       tags:
@@ -758,6 +824,46 @@ components:
           maxLength: 100
           example: '123456'
 
+    Call:
+      type: object
+      required:
+        - call_id
+        - daterange
+        - from_phone
+        - to_phone
+        - direction
+        - duration
+        - recording
+      properties:
+        call_id:
+          type: string
+          maxLength: 34
+          example: 'CB9dbadb21bdb4f535d44ae03253c3ebc5'
+        daterange:
+          type: string
+          maxLength: 50
+          example: '2012-07-05 17:56:42'
+        from_phone:
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 9497273200
+        to_phone:
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 9512214327
+        direction:
+          type: boolean
+          description: '0 = Inbound, 1 = Outbound'
+        duration:
+          type: integer
+          example: 140
+        recording:
+          type: string
+          maxLength: 34
+          example: 'https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/AB316c10acdba352350fade824befad268.mp3'
+
     LeadsActivation:
       type: object
       required:
@@ -880,6 +986,7 @@ components:
         password:
           description: 'The password'
           type: string
+          format: password
           maxLength: 50
           example: '123##'
         phone_cell:
