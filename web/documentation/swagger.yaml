@@ -32,14 +32,20 @@ security:
 tags:
   - name: hidden
     description: 'Only for internal use'
+
   - name: Activation
     description: 'You are able to add and delete activation for your campaigns.'
+
   - name: Alert
     description: "You are able to add, list and delete alerts for your campaigns.\n\n
       If there is a CRM that you would like added please email support@cloudone.com"
 
   - name: Call
     description: 'You are able get a list of calls.'
+    
+  - name: Campaign
+    description: 'You are able to add, list, get info, and update your campaigns.'
+
   - name: User
     description: 'You are able to add, list, get info, update and delete users for your dealers.'
 
@@ -522,7 +528,7 @@ paths:
                     "to_phone": "9512214327",
                     "direction": "inbound",
                     "duration": "140",
-                    "recording": "https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/AB316c10acdba352350fade824befad268.mp3",
+                    "recording": "https://94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com/AB316c10acdba352350fade824befad268.mp3",
                     "transcription": ""
                   },
                   {
@@ -532,7 +538,7 @@ paths:
                     "to_phone": "9512214327",
                     "direction": "inbound",
                     "duration": "83",
-                    "recording": "https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/CDd521166f04e52f11eae7f2fed874f606.mp3",
+                    "recording": "https://94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com/CDd521166f04e52f11eae7f2fed874f606.mp3",
                     "transcription": ""
                   }
                 ]
@@ -543,6 +549,282 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Campaign not found'
+
+  '/campaigns':
+    post:
+      tags:
+        - Campaign
+      operationId: addCampaign
+      description: 'You are able add your campaign.'
+      parameters:
+        - name: dealer_id
+          in: header
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Campaign'
+
+              type: object
+              properties:
+                custom_text:
+                  description: 'Custom Text (require event_start_date field)'
+                  type: string
+                  example: 'Custom Text Data'
+                prize_info:
+                  description: 'Prize Information (require event_start_date field)'
+                  type: string
+                  example: 'Prize Data'
+                prize_description:
+                  description: 'Prize Description (require event_start_date field). Agent will read this text'
+                  type: string
+                event_start_date:
+                  description: 'Event Start Date'
+                  type: string
+                  format: date
+                  example: '2014-10-22'
+                event_end_date:
+                  description: 'Event End Date (require event_start_date field)'
+                  type: string
+                  format: date
+                  example: '2015-10-22'
+                override:
+                  type: object
+                  properties:
+                    location:
+                      type: object
+                      properties:
+                        name:
+                          description: 'Alternative location name'
+                          type: string
+                          maxLength: 100
+                          example: 'Override Name'
+                        address:
+                          description: 'Alternative location'
+                          type: string
+                          maxLength: 100
+                          example: '123 Override Fake St'
+                        pronunciation:
+                          description: 'pronunciation of the address'
+                          type: string
+                          maxLength: 100
+                          example: 'Override Fake'
+                        address2:
+                          type: string
+                          maxLength: 100
+                          example: 'Suite 123'
+                        city:
+                          type: string
+                          maxLength: 50
+                          example: 'Vancouver'
+                        state:
+                          type: string
+                          maxLength: 2
+                          example: 'WA'
+                        zip:
+                          type: integer
+                          minimum: 10000
+                          maximum: 99999
+                          example: 98663
+                        intersection:
+                          type: string
+                          maxLength: 255
+                          example: 'Between C and A Street'
+                        landmarks:
+                          type: string
+                          maxLength: 255
+                          example: 'A BIG sign'
+                    ask_for:
+                      type: object
+                      properties:
+                        name:
+                          description: 'Name'
+                          type: string
+                          maxLength: 100
+                          example: 'John Doe'
+                        phone:
+                          description: 'Provide the best contact telephone number for this person'
+                          type: integer
+                          minimum: 1000000000
+                          maximum: 9999999999
+                          example: 3603334511
+                        gender:
+                          description: '"n" = neutral, "m" = male, "f" = female'
+                          type: string
+                          maxLength: 1
+                          example: 'M'
+                        pronunciation:
+                          description: 'pronunciation of the ask for'
+                          type: string
+                          maxLength: 100
+                          example: 'Override Fake'
+                    appointment_hours:
+                      type: object
+                      properties:
+                        monday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '21:00'
+                        tuesday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '21:00'
+                        wednesday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '21:00'
+                        thursday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '21:00'
+                        friday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '21:00'
+                        saturday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                            first_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '09:00'
+                            last_appointment:
+                              type: string
+                              description: 'Time'
+                              example: '18:00'
+                        sunday:
+                          type: object
+                          properties:
+                            opened:
+                              type: boolean
+                              description: '0 for no, 1 for yes'
+                additional_info:
+                  type: object
+                  properties:
+                  
+                    field_name:
+                      description: 'Custom Field Name'
+                      type: string
+                      maxLength: 255
+                      example: 'custom field data'
+
+            example: 
+              {
+                "campaign_name": "API Test Campaign",
+                "external_campaign_id": "ABC123",
+                "call_center_script": "501",
+                "answer_as": "Approval Center",
+                "outbound_as": "Test Dealer",
+                "start_date": "2014-10-22",
+                "end_date": "2015-10-22",
+                "override": {
+                  "location": {
+                    "name": "Override Name",
+                    "address": "123 Override Fake St",
+                    "pronunciation": "Override Fake",
+                    "address2": "Suite 123",
+                    "city": "Vancouver",
+                    "state": "WA",
+                    "zip": "98663",
+                    "intersection": "Between C and A Street",
+                    "landmarks": "A BIG sign"
+                  },
+                  "ask_for": {
+                    "name": "John Doe",
+                    "pronunciation": "Override Fake",
+                    "phone": "3603334511",
+                    "gender": "M"
+                  }
+                },
+                "direct_mail_quantity": "10000",
+                "mailer_image_url": "https://mailer_image_url.com/image_name.jpg",
+                "event_start_date": "2014-10-22",
+                "event_end_date": "2015-10-22",
+                "custom_text": "Custom Text Data",
+                "prize_info": "Prize Data",
+                "additional_info": {
+                  "custom_field": "custom field data",
+                  "custom_field1": "custom field data"
+                },
+                "dealer_transportation": "1",
+                "notes": "This is a campaign"
+              }
+        description: 'Campaign info'
+      responses:
+        '200':
+          description: 'Campaign has been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "campaign_id": "654321"
+                }
+
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Dealer not found'
 
   '/users':
     get:
@@ -621,6 +903,8 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
            $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Dealer not found'
 
   '/users/{id}':
     get:
@@ -635,6 +919,7 @@ paths:
           required: true
           schema:
             type: string
+            format: password
             example: 123456
       responses:
         '200':
@@ -862,7 +1147,89 @@ components:
         recording:
           type: string
           maxLength: 34
-          example: 'https:\/\/94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/AB316c10acdba352350fade824befad268.mp3'
+          example: 'https://94595f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com/AB316c10acdba352350fade824befad268.mp3'
+
+    Campaign:
+      type: object
+      required:
+        - campaign_name
+      properties:
+        campaign_name:
+          description: 'Campaign Name'
+          type: string
+          maxLength: 255
+          example: 'API Test Campaign'
+        external_campaign_id:
+          description: 'External Campaign ID'
+          type: string
+          maxLength: 50
+          example: 'ABC123'
+        campaign_type:
+          description: '"Normal", "DirectMail", "Call Forwarding", "Conquest", defaults to Normal if left blank'
+          type: string
+          maxLength: 25
+        script_id:
+          description: |
+            Call Scripts:
+             * `502` - Short Credit App
+             * `504` - Payment Swap
+             * `505` - Event
+             * `506` - Vehicle Buy Back
+             * `507` - Bankruptcy Short Script
+             * `512` - Long Credit App
+             * `515` - Prize
+             * `517` - Prize with Trade
+             * `518` - Vehicle Recall
+             * `520` - Vehicle Buy Back - VM
+             * `522` - Event VM
+             * `523` - Lease Renew
+             * `528` - Short Credit App - Not Direct Mail
+             * `529` - Vehicle Buy Back
+             * `542` - Short Credit - Television
+          type: integer
+          enum: [ 502, 504, 505, 506, 507, 512, 515, 517, 518, 520, 522, 523, 528, 529, 542 ]
+        answer_as:
+          description: 'Answer As'
+          type: string
+          maxLength: 255
+          example: 'Approval Center'
+        outbound_as:
+          description: 'Outbound As'
+          type: string
+          maxLength: 255
+          example: 'Test Dealer'
+        start_date:
+          description: 'Start Date'
+          type: string
+          format: date
+          example: '2014-10-22'
+        end_date:
+          description: 'End Date'
+          type: string
+          format: date
+          example: '2015-10-22'
+        notes:
+          description: 'Campaign Notes'
+          type: string
+          maxLength: 255
+          example: 'This is a campaign'
+        max_appts:
+          description: 'Maximum amount of appointments you want to allow per hour. 0 will be unlimited.'
+          type: integer
+          default: 0
+        dealer_transportation:
+          description: 'A dealer is willing to pick up customers (0 for no, 1 for yes)'
+          type: boolean
+          default: 0
+        mailer_url:
+          description: 'Mailer Image URL'
+          type: string
+          maxLength: 255
+          example: 'https://mailer_image_url.com/image_name.jpg'
+        campaign_qty:
+          description: 'Direct Mail Quantity'
+          type: integer
+          example: 10000
 
     LeadsActivation:
       type: object
