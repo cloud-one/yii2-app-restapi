@@ -109,6 +109,248 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
            $ref: "#/components/responses/UnauthorizedError"
+  '/agents/{id}':
+    get:
+      tags:
+          - hidden
+      operationId: getAgentById
+      description: 'You are able to get agent info by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Agent ID'
+          required: true
+          schema:
+            type: string
+            example: 54321
+      responses:
+        '200':
+          description: 'Returns agent info'
+          content:
+            application/json:
+              example: 
+                {
+                  "agent_id": "54321",
+                  "name_first": "Emanuele",
+                  "name_last": "Spooner",
+                  "username": "bryan_agent",
+                  "password": "123##",
+                  "email": "test@example.com",
+                  "phone_home": "9876543210",
+                  "phone_cell": "1234567890",
+                  "phone_office": "0123456789",
+                  "agent_type": "digital",
+                  "active": "1",
+                  "lead_id": "0",
+                  "time_zone": "US/Pacific",
+                  "skill_level": "3",
+                  "tier": "3",
+                  "carnow_agent_id": "0",
+                  "training": "0",
+                  "outside_login": "1",
+                  "text_access": "0",
+                  "email_access": "0",
+                  "over_night": "0",
+                  "lead_search": "0",
+                  "part_time": "0",
+                  "max_digital_tasks": "10",
+                  "payrate": "10.75",
+                  "start_date": "2016-06-10 07:00:00",
+                  "payroll_id": "0",
+                  "address": "2105 C St.4",
+                  "address2": "",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "stage": "2",
+                  "belt_level": "4",
+                  "scripts": {
+                    "script_id": "1",
+                    "trained": "1",
+                    "inbound": "1",
+                    "outbound": "1"
+                  },
+                  "languages": ["en", "es"]
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Agent is not found'
+    put:
+      tags:
+          - hidden
+      operationId: updateAgentById
+      description: 'You are able to add agent.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Agent ID'
+          required: true
+          schema:
+            type: string
+            example: 54321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Agent'
+              type: object
+              properties:
+                door_access:
+                  type: object
+                  properties:
+                    door_id:
+                      type: integer
+                      example: 1
+                    active:
+                      type: boolean
+                      example: 1
+                    start_hour:
+                      type: integer
+                      example: 10
+                    end_hour:
+                      type: integer
+                      example: 15
+                stage:
+                  type: integer
+                  example: 2
+                belt_level:
+                  type: integer
+                  example: 4
+                scripts:
+                  type: object
+                  properties:
+                    script_id:
+                      type: integer
+                      example: 1
+                    trained:
+                      type: boolean
+                      example: 1
+                    inbound:
+                      type: boolean
+                      example: 1
+                    outbound:
+                      type: boolean
+                      example: 1
+                languages:
+                  type: array
+                  items:
+                    type: string
+                  example: ['en', 'es']
+            example: 
+              {
+                "name_first": "Emanuele",
+                "name_last": "Spooner",
+                "username": "bryan_agent",
+                "password": "123##",
+                "email": "test@example.com",
+                "phone_home": "9876543210",
+                "phone_cell": "1234567890",
+                "phone_office": "0123456789",
+                "agent_type": "digital",
+                "active": "1",
+                "lead_id": "0",
+                "time_zone": "US/Pacific",
+                "skill_level": "3",
+                "tier": "3",
+                "carnow_agent_id": "0",
+                "training": "0",
+                "outside_login": "1",
+                "text_access": "0",
+                "email_access": "0",
+                "over_night": "0",
+                "lead_search": "0",
+                "part_time": "0",
+                "max_digital_tasks": "10",
+                "payrate": "10.75",
+                "start_date": "2016-06-10 07:00:00",
+                "payroll_id": "0",
+                "address": "2105 C St.4",
+                "address2": "",
+                "city": "Vancouver",
+                "state": "WA",
+                "zip": "98663",
+                "door_access": {
+                  "door_id": "1",
+                  "active": "1",
+                  "start_hour": "10",
+                  "end_hour": "15"
+                },
+                "stage": "2",
+                "belt_level": "4",
+                "scripts": {
+                  "script_id": "1",
+                  "trained": "1",
+                  "inbound": "1",
+                  "outbound": "1"
+                },
+                "languages": ["en", "es"]
+              }
+        description: 'Agent info'
+      responses:
+        '200':
+          description: 'Agent has been updated successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "agent_id": "54321",
+                  "name_first": "Emanuele",
+                  "name_last": "Spooner",
+                  "username": "bryan_agent",
+                  "password": "123##",
+                  "email": "test@example.com",
+                  "phone_home": "9876543210",
+                  "phone_cell": "1234567890",
+                  "phone_office": "0123456789",
+                  "agent_type": "digital",
+                  "active": "1",
+                  "lead_id": "0",
+                  "time_zone": "US/Pacific",
+                  "skill_level": "3",
+                  "tier": "3",
+                  "carnow_agent_id": "0",
+                  "training": "0",
+                  "outside_login": "1",
+                  "text_access": "0",
+                  "email_access": "0",
+                  "over_night": "0",
+                  "lead_search": "0",
+                  "part_time": "0",
+                  "max_digital_tasks": "10",
+                  "payrate": "10.75",
+                  "start_date": "2016-06-10 07:00:00",
+                  "payroll_id": "0",
+                  "address": "2105 C St.4",
+                  "address2": "",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "door_access": {
+                    "door_id": "1",
+                    "active": "1",
+                    "start_hour": "10",
+                    "end_hour": "15"
+                  },
+                  "stage": "2",
+                  "belt_level": "4",
+                  "scripts": {
+                    "script_id": "1",
+                    "trained": "1",
+                    "inbound": "1",
+                    "outbound": "1"
+                  },
+                  "languages": ["en", "es"]
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Agent is not found'
 
   '/activations':
     post:
@@ -1010,7 +1252,6 @@ paths:
             schema:
               allOf:
                 - $ref: '#/components/schemas/Campaign'
-
               type: object
               properties:
                 custom_text:
