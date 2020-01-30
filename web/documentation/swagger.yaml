@@ -351,6 +351,132 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Agent is not found'
+  '/data/email':
+    get:
+      tags:
+          - hidden
+      operationId: getDataEmail
+      description: 'You are able to get email from household_data.'
+      parameters:
+        - name: name_first
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Test'
+        - name: name_last
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Testington'
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+            example: '123 Fake St'
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Vancouver'
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            example: 'NY'
+        - name: zip
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 10000
+            maximum: 99999
+            example: 98663
+      responses:
+        '200':
+          description: 'Returns email'
+          content:
+            application/json:
+              example: 
+                { "email": "test@example.com" }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'No email found'
+  '/data/phone':
+    get:
+      tags:
+          - hidden
+      operationId: getDataPhone
+      description: 'You are able to get phone from household_data.'
+      parameters:
+        - name: name_first
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Test'
+        - name: name_last
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Testington'
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+            example: '123 Fake St'
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 50
+            example: 'Vancouver'
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            example: 'NY'
+        - name: zip
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 10000
+            maximum: 99999
+            example: 98663
+      responses:
+        '200':
+          description: 'Returns phone'
+          content:
+            application/json:
+              example: 
+                { "phone": "9497273200" }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'No phone found'
 
   '/activations':
     post:
@@ -1887,9 +2013,10 @@ components:
           maxLength: 2
           example: 'WA'
         zip:
-          type: string
-          maxLength: 10
-          example: '98663'
+          type: integer
+          minimum: 10000
+          maximum: 99999
+          example: 98663
   
     Alert:
       type: object
