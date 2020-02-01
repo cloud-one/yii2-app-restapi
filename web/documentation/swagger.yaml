@@ -477,6 +477,62 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'No phone found'
+  '/data/blackbook':
+    get:
+      tags:
+          - hidden
+      operationId: getDataBlackbook
+      description: 'You are able to get blackbook info.'
+      parameters:
+        - name: vin
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 17
+            example: 'JH4DC4459YS015522'
+        - name: zip
+          in: query
+          schema:
+            type: integer
+            minimum: 10000
+            maximum: 99999
+            example: 98663
+        - name: state
+          in: query
+          schema:
+            type: string
+            maxLength: 2
+            example: 'NY'
+        - name: mileage
+          in: query
+          schema:
+            type: integer
+            example: 60000
+      responses:
+        '200':
+          description: 'Returns cars info'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "car": {
+                      "year": "Year", 
+                			"make": "Make",
+                			"model": "Model", 
+                			"style": "Style",
+                			"msrp": "MSRP",
+                			"tradein_clean": "TradeInClean", 
+                			"tradein_average": "TradeInAverage",
+                			"tradein_rough": "TradeInRough"
+                    }
+                  }
+                ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
 
   '/activations':
     post:
