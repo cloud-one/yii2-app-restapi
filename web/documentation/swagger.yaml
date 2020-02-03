@@ -46,6 +46,9 @@ tags:
   - name: Campaign
     description: 'You are able to add, list, get info, and update your campaigns.'
 
+  - name: Dealer
+    description: 'You are able to add, list, get info, and update dealers under your client id.'
+
   - name: User
     description: 'You are able to add, list, get info, update and delete users for your dealers.'
 
@@ -519,13 +522,13 @@ paths:
                   {
                     "car": {
                       "year": "Year", 
-                			"make": "Make",
-                			"model": "Model", 
-                			"style": "Style",
-                			"msrp": "MSRP",
-                			"tradein_clean": "TradeInClean", 
-                			"tradein_average": "TradeInAverage",
-                			"tradein_rough": "TradeInRough"
+                      "make": "Make",
+                      "model": "Model", 
+                      "style": "Style",
+                      "msrp": "MSRP",
+                      "tradein_clean": "TradeInClean", 
+                      "tradein_average": "TradeInAverage",
+                      "tradein_rough": "TradeInRough"
                     }
                   }
                 ]
@@ -1726,6 +1729,202 @@ paths:
         '404':
           description: 'Campaign or Dealer is not found'
 
+  '/dealers':
+    post:
+      tags:
+        - Dealer
+      operationId: addDealer
+      description: 'You are able to add dealers under your client id.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Dealer'
+              type: object
+              properties:
+                dealer_hours:
+                  type: object
+                  properties:
+                    monday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    tuesday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    wednesday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    thursday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    friday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    saturday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '18:00'
+                    sunday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '18:00'
+
+            example: 
+              {
+                "dealer_info": {
+                  "name": "Test Dealer",
+                  "dba": "Test DBA",
+                  "address": "123 Fake St",
+                  "address2": "Suite 321",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "phone": "1234567890",
+                  "fax": "9876543210",
+                  "external_dealer_id": "C12345",
+                  "time_zone": "US\/Pacific",
+                  "website": "http:\/\/www.example.com"
+                },
+                "dealer_hours": {
+                  "monday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "tuesday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "wednesday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "thursday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "friday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "saturday": {
+                    "opened": "1",
+                    "open": "10:00",
+                    "close": "18:00"
+                  },
+                  "sunday": {
+                    "opened": "0"
+                  }
+                },
+                "billing_info": {
+                  "name_first": "Fake",
+                  "name_last": "Fakington",
+                  "address": "123 Fake St",
+                  "address2": "Suite 321",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "email": "billing@example.com",
+                  "phone": "3456789012",
+                  "phone_ext": "123",
+                  "fax": "4567890123"
+                }
+              }
+        description: 'Dealer info'
+      responses:
+        '200':
+          description: 'Dealer has been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "dealer_id": "123456"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
   '/users':
     get:
       tags:
@@ -2255,6 +2454,142 @@ components:
           description: 'Direct Mail Quantity'
           type: integer
           example: 10000
+
+    Dealer:
+      type: object
+      required:
+        - client_id
+        - company
+        - address
+        - city
+        - state
+        - zip
+        - phone_company
+        - time_zone
+      properties:
+        client_id:
+          description: 'Your Client ID from CloudOne'
+          type: integer
+          example: 400007
+        company:
+          description: 'Dealer Name'
+          type: string
+          maxLength: 100
+          example: 'Test Dealer'
+        address:
+          description: 'Dealer Address'
+          type: string
+          maxLength: 100
+          example: '123 Fake St'
+        city:
+          description: 'Dealer City'
+          type: string
+          maxLength: 100
+          example: 'Vancouver'
+        state:
+          description: 'Dealer State'
+          type: string
+          maxLength: 2
+          example: 'WA'
+        zip:
+          description: 'Dealer Zip'
+          type: integer
+          maximum: 99999
+          example: 98663
+        phone_company:
+          description: 'Dealer Phone'
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 1234567890
+        time_zone:
+          description: 'Dealer Time Zone'
+          type: string
+          maxLength: 30
+          example: 'US/Pacific'
+        dba:
+          description: 'Dealer DBA'
+          type: string
+          maxLength: 100
+          example: 'Test DBA'
+        address2:
+          description: 'Dealer Address2'
+          type: string
+          maxLength: 100
+          example: 'Suite 321'
+        phone_fax:
+          description: 'Dealer Fax'
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 1234567890
+        website:
+          description: 'Dealer Website'
+          type: string
+          maxLength: 255
+          example: 'http://www.example.com'
+        pronunciation:
+          description: 'Pronunciation of the dealer'
+          type: string
+          maxLength: 100
+          example: 'test'
+        billing_name_first:
+          type: string
+          maxLength: 50
+          example: 'Fake'
+        billing_name_last:
+          type: string
+          maxLength: 50
+          example: 'Fakington'
+        billing_address1:
+          type: string
+          maxLength: 100
+          example: '123 Fake St'
+        billing_address2:
+          type: string
+          maxLength: 100
+          example: 'Suite 321'
+        billing_city:
+          type: string
+          maxLength: 30
+          example: 'Vancouver'
+        billing_state:
+          type: string
+          maxLength: 2
+          example: 'WA'
+        billing_zip:
+          type: integer
+          maximum: 99999
+          example: 98663
+        billing_email:
+          type: string
+          maxLength: 255
+          example: 'billing@example.com'
+        billing_phone:
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 3456789012
+        billing_phone_ext:
+          type: integer
+          example: 123
+        billing_fax:
+          type: integer
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 4567890123
+        lat:
+          type: number
+          format: float
+          example: 45.48485000
+        lng:
+          type: number
+          format: float
+          example: -122.55700500
+        status:
+          description: '0 = Paused, 1 = Active, 2 = Pending, 3 = Cancelled,  4 = Billing Issue'
+          type: integer
+          example: 0
 
     LeadsActivation:
       type: object
