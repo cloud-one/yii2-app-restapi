@@ -1730,6 +1730,32 @@ paths:
           description: 'Campaign or Dealer is not found'
 
   '/dealers':
+    get:
+      tags:
+        - Dealer
+      operationId: getDealers
+      description: 'You are able to get list of all your dealers.'
+      responses:
+        '200':
+          description: 'Returns a list of dealers'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "dealer_id": "1234567",
+                    "name": "Test Dealer 1"
+                  },
+                  {
+                    "dealer_id": "2345678",
+                    "name": "Test Dealer 2"
+                  }
+                ]
+
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
     post:
       tags:
         - Dealer
@@ -1924,6 +1950,365 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+  '/dealers/{id}':
+    get:
+      tags:
+        - Dealer
+      operationId: getDealerById
+      description: 'Get information about a specific dealer.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Returns dealer info'
+          content:
+            application/json:
+              example: 
+                {
+                  "dealer_info": {
+                    "dealer_id": "123456",
+                    "name": "Test Dealer",
+                    "dba": "Test DBA",
+                    "address": "123 Fake St",
+                    "address2": "Suite 321",
+                    "city": "Vancouver",
+                    "state": "WA",
+                    "zip": "98663",
+                    "phone": "1234567890",
+                    "fax": "9876543210",
+                    "external_dealer_id": "C12345",
+                    "time_zone": "US\/Pacific",
+                    "website": "http:\/\/www.example.com",
+                    "pronunciation": "test"
+                  },
+                  "dealer_hours": {
+                    "monday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "tuesday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "wednesday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "thursday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "friday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "saturday": {
+                      "opened": "1",
+                      "open": "10:00",
+                      "close": "18:00"
+                    },
+                    "sunday": {
+                      "opened": "0"
+                    }
+                  },
+                  "billing_info": {
+                    "name_first": "Fake",
+                    "name_last": "Fakington",
+                    "address": "123 Fake St",
+                    "address2": "Suite 321",
+                    "city": "Vancouver",
+                    "state": "WA",
+                    "zip": "98663",
+                    "email": "billing@example.com",
+                    "phone": "3456789012",
+                    "phone_ext": "123",
+                    "fax": "4567890123"
+                  }
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Dealer is not found'
+    put:
+      tags:
+        - Dealer
+      operationId: updateDealerById
+      description: 'You are able to update dealers under your client id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Dealer'
+              type: object
+              properties:
+                dealer_hours:
+                  type: object
+                  properties:
+                    monday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    tuesday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    wednesday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    thursday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    friday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '21:00'
+                    saturday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '18:00'
+                    sunday:
+                      type: object
+                      properties:
+                        opened:
+                          type: boolean
+                          description: '0 for no, 1 for yes'
+                        open:
+                          type: string
+                          description: 'Time'
+                          example: '09:00'
+                        close:
+                          type: string
+                          description: 'Time'
+                          example: '18:00'
+
+            example: 
+              {
+                "dealer_info": {
+                  "name": "Test Dealer",
+                  "dba": "Test DBA",
+                  "address": "123 Fake St",
+                  "address2": "Suite 321",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "phone": "1234567890",
+                  "fax": "9876543210",
+                  "external_dealer_id": "C12345",
+                  "time_zone": "US\/Pacific",
+                  "website": "http:\/\/www.example.com"
+                },
+                "dealer_hours": {
+                  "monday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "tuesday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "wednesday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "thursday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "friday": {
+                    "opened": "1",
+                    "open": "09:00",
+                    "close": "21:00"
+                  },
+                  "saturday": {
+                    "opened": "1",
+                    "open": "10:00",
+                    "close": "18:00"
+                  },
+                  "sunday": {
+                    "opened": "0"
+                  }
+                },
+                "billing_info": {
+                  "name_first": "Fake",
+                  "name_last": "Fakington",
+                  "address": "123 Fake St",
+                  "address2": "Suite 321",
+                  "city": "Vancouver",
+                  "state": "WA",
+                  "zip": "98663",
+                  "email": "billing@example.com",
+                  "phone": "3456789012",
+                  "phone_ext": "123",
+                  "fax": "4567890123"
+                }
+              }
+        description: 'Dealer info'
+      responses:
+        '200':
+          description: 'Dealer has been updated successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "dealer_info": {
+                    "dealer_id": "123456",
+                    "name": "Test Dealer",
+                    "dba": "Test DBA",
+                    "address": "123 Fake St",
+                    "address2": "Suite 321",
+                    "city": "Vancouver",
+                    "state": "WA",
+                    "zip": "98663",
+                    "phone": "1234567890",
+                    "fax": "9876543210",
+                    "external_dealer_id": "C12345",
+                    "time_zone": "US\/Pacific",
+                    "website": "http:\/\/www.example.com"
+                  },
+                  "dealer_hours": {
+                    "monday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "tuesday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "wednesday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "thursday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "friday": {
+                      "opened": "1",
+                      "open": "09:00",
+                      "close": "21:00"
+                    },
+                    "saturday": {
+                      "opened": "1",
+                      "open": "10:00",
+                      "close": "18:00"
+                    },
+                    "sunday": {
+                      "opened": "0"
+                    }
+                  },
+                  "billing_info": {
+                    "name_first": "Fake",
+                    "name_last": "Fakington",
+                    "address": "123 Fake St",
+                    "address2": "Suite 321",
+                    "city": "Vancouver",
+                    "state": "WA",
+                    "zip": "98663",
+                    "email": "billing@example.com",
+                    "phone": "3456789012",
+                    "phone_ext": "123",
+                    "fax": "4567890123"
+                  }
+                }
+
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Dealer is not found'
 
   '/users':
     get:
