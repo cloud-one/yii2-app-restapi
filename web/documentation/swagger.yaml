@@ -536,6 +536,129 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+  '/dealer/alerts':
+    post:
+      tags:
+        - hidden
+      operationId: addDealerAlert
+      description: 'You are able to add alerts for dealers.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Dealer ID'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        description: 'Alert info'
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - category
+              properties:
+                category:
+                  description: |
+                    categories:
+                     * `email` - type and email fields are required
+                     * `sms` - number and name fields are required
+                     * `crm_email` - type and address fields are required
+                     * `crm_post` - type and number fields are required
+                  type: string
+                  maxLength: 100
+                type:
+                  type: string
+                  maxLength: 30
+                email:
+                  type: string
+                  maxLength: 100
+                number:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                address:
+                  type: string
+                  maxLength: 100
+            example:
+              {
+                "category": "sms",
+                "number": "3149834592",
+                "name": "work cell"
+              }
+      responses:
+        '200':
+          description: 'Alert has been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "alert_id": "1153"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Dealer is not found'
+  '/dealer/alerts/{id}':
+    delete:
+      tags:
+        - hidden
+      operationId: deleteDealerAlert
+      description: 'You are able to delete alert by id for dealer.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Alert ID'
+          required: true
+          schema:
+            type: string
+            example: 1153
+      responses:
+        '200':
+          description: 'Alert has been deleted successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "alert_id": "1153"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Alert is not found'
+  '/dealers/search':
+    get:
+      tags:
+          - hidden
+      operationId: searchDealers
+      description: 'You are able to search dealers by client_id.'
+      responses:
+        '200':
+          description: 'Returns a list of dealers'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "dealer_id": "1234567",
+                    "name": "Test Dealer 1"
+                  },
+                  {
+                    "dealer_id": "2345678",
+                    "name": "Test Dealer 2"
+                  }
+                ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
 
   '/activations':
     post:
