@@ -49,6 +49,9 @@ tags:
   - name: Dealer
     description: 'You are able to add, list, get info, and update dealers under your client id.'
 
+  - name: Phone
+    description: 'You are able to add, delete, and get_info.'
+
   - name: User
     description: 'You are able to add, list, get info, update and delete users for your dealers.'
 
@@ -659,6 +662,128 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+  '/phones/search':
+    get:
+      tags:
+          - hidden
+      operationId: searchPhones
+      description: 'You are able to search phones by zip and/or area_code.'
+      parameters:
+        - name: area_code
+          in: query
+          description: 'Area Code'
+          required: true
+          schema:
+            type: integer
+            minimum: 100
+            maximum: 999
+            example: 346
+        - name: zip_code
+          in: query
+          description: 'Zip Code'
+          schema:
+            type: integer
+            minimum: 10000
+            maximum: 99999
+            example: 12345
+      responses:
+        '200':
+          description: 'Returns a list of phones'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "phone_number": "5551111111",
+                    "city": "Platteville",
+                    "zip": "80651"
+                  },
+                  {
+                    "phone_number": "5552222222",
+                    "city": "LAS VEGAS",
+                    "zip": "89139"
+                  }
+               ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Unable to find phone numbers in the specified area.'
+  '/phones/buy/{phone_number}':
+    post:
+      tags:
+        - hidden
+      operationId: buyPhone
+      description: 'You are able to buy phone number.'
+      parameters:
+        - name: phone_number
+          in: path
+          required: true
+          description: 'Phone Number of the campaign'
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 5551111111
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            minimum: 100000
+            maximum: 999999
+            example: 654321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - label
+              properties:
+                label:
+                  type: string
+                  example: "Test Number"
+                redirect_number:
+                  type: integer
+                  example: 5551234567
+                whisper:
+                  type: boolean
+                  example: true
+                phone_type:
+                  description: "1 = Call Center,\n\n
+                    2 = Call Forward,\n\n
+                    3 = IVR,\n\n
+                    4 = IVR + Call Center.\n\n
+                    If you set phone_type = 1, the redirect_number will be removed."
+                  type: integer
+                  minimum: 1
+                  maximum: 4
+                  example: 1
+            example: 
+              {
+                "label": "Test Number",
+                "redirect_number": 5551234567,
+                "whisper": true,
+                "phone_type": 2
+              }
+      responses:
+        '200':
+          description: 'Phone has been bought successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_sid": "PNea7ee8066b5d2157594e0228eda7b2c6"
+                }
+        '400':
+          description: 'Unable to acquire phone number'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
 
   '/activations':
     post:
@@ -2007,8 +2132,8 @@ paths:
                   "phone": "1234567890",
                   "fax": "9876543210",
                   "external_dealer_id": "C12345",
-                  "time_zone": "US\/Pacific",
-                  "website": "http:\/\/www.example.com"
+                  "time_zone": "US/Pacific",
+                  "website": "http://www.example.com"
                 },
                 "dealer_hours": {
                   "monday": {
@@ -2106,8 +2231,8 @@ paths:
                     "phone": "1234567890",
                     "fax": "9876543210",
                     "external_dealer_id": "C12345",
-                    "time_zone": "US\/Pacific",
-                    "website": "http:\/\/www.example.com",
+                    "time_zone": "US/Pacific",
+                    "website": "http://www.example.com",
                     "pronunciation": "test"
                   },
                   "dealer_hours": {
@@ -2301,8 +2426,8 @@ paths:
                   "phone": "1234567890",
                   "fax": "9876543210",
                   "external_dealer_id": "C12345",
-                  "time_zone": "US\/Pacific",
-                  "website": "http:\/\/www.example.com"
+                  "time_zone": "US/Pacific",
+                  "website": "http://www.example.com"
                 },
                 "dealer_hours": {
                   "monday": {
@@ -2373,8 +2498,8 @@ paths:
                     "phone": "1234567890",
                     "fax": "9876543210",
                     "external_dealer_id": "C12345",
-                    "time_zone": "US\/Pacific",
-                    "website": "http:\/\/www.example.com"
+                    "time_zone": "US/Pacific",
+                    "website": "http://www.example.com"
                   },
                   "dealer_hours": {
                     "monday": {
@@ -2432,6 +2557,209 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Dealer is not found'
+
+  '/phones':
+    get:
+      tags:
+        - Phone
+      operationId: getPhones
+      description: 'You are able to get list of phones for your campaign.'
+      parameters:
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            minimum: 100000
+            maximum: 999999
+            example: 654321
+      responses:
+        '200':
+          description: 'Returns a list of phones'
+          content:
+            application/json:
+              example: 
+                [
+                  {
+                    "phone_number": "5551111111",
+                    "label": "Test Number"
+                  },
+                  {
+                    "phone_number": "5552222222",
+                    "label": "Test Number 2"
+                  }
+               ]
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Сampaign is not found'
+    post:
+      tags:
+        - Phone
+      operationId: addPhone
+      description: 'You are able to add phone.'
+      parameters:
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            minimum: 100000
+            maximum: 999999
+            example: 654321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phone'
+            example: 
+              {
+                "area_code": 346,
+                "zip_code": 12345,
+                "label": "Test Number",
+                "redirect_number": 5551234567,
+                "whisper": true,
+                "phone_type": 2
+              }
+      responses:
+        '200':
+          description: 'Phone has been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_number": "5551234567"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
+  '/phones/{phone_number}':
+    get:
+      tags:
+        - Phone
+      operationId: getPhoneInfo
+      description: 'You are able to get info about phone.'
+      parameters:
+        - name: phone_number
+          in: path
+          required: true
+          description: 'Phone number'
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 5551111111
+      responses:
+        '200':
+          description: 'Returns info about phone.'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_number": "5551111111",
+                  "label": "Test Number",
+                  "campaign_id": "654321",
+                  "whisper": "Y",
+                  "phone_type": "2",
+                  "redirect_number": "5551234567"
+                }
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Phone number is not found'
+    put:
+      tags:
+        - Phone
+      operationId: updatePhone
+      description: 'You are able to update phone.'
+      parameters:
+        - name: phone_number
+          in: path
+          required: true
+          description: 'Phone Number of the campaign'
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 5551111111
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            minimum: 100000
+            maximum: 999999
+            example: 654321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phone'
+            example: 
+              { 
+                "phone_number": "5551111111",
+                "label": "Test Number",
+                "whisper": true,
+                "phone_type": 1,
+                "redirect_number": ""
+              }
+      responses:
+        '200':
+          description: 'Returns updated phone number.'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_number": "5551111111",
+                  "label": "Test Number",
+                  "whisper": true,
+                  "phone_type": 1,
+                  "redirect_number": ""
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Phone number or Campaign ID is not found'
+    delete:
+      tags:
+        - Phone
+      operationId: deletePhone
+      description: 'You are able to delete phone.'
+      parameters:
+        - name: phone_number
+          in: path
+          required: true
+          description: 'Phone number'
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 5551111111
+      responses:
+        '200':
+          description: 'Returns deleted phone number.'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_number": "5551111111"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Phone number is not found'
 
   '/users':
     get:
@@ -3194,6 +3522,45 @@ components:
         vin:
           type: string
           maxLength: 17
+
+    Phone:
+      type: object
+      required:
+        - area_code
+        - zip_code
+        - label
+      properties:
+        area_code:
+          description: 'Area Code'
+          type: integer
+          minimum: 100
+          maximum: 999
+          example: 346
+        zip_code:
+          description: 'Zip Code'
+          type: integer
+          minimum: 10000
+          maximum: 99999
+          example: 12345
+        label:
+          type: string
+          example: "Test Number"
+        redirect_number:
+          type: integer
+          example: 5551234567
+        whisper:
+          type: boolean
+          example: true
+        phone_type:
+          description: "1 = Call Center,\n\n
+            2 = Call Forward,\n\n
+            3 = IVR,\n\n
+            4 = IVR + Call Center.\n\n
+            If you set phone_type = 1, the redirect_number will be removed."
+          type: integer
+          minimum: 1
+          maximum: 4
+          example: 1
 
     User:
       type: object
