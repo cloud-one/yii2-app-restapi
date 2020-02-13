@@ -49,6 +49,9 @@ tags:
   - name: Dealer
     description: 'You are able to add, list, get info, and update dealers under your client id.'
 
+  - name: Lead
+    description: 'You are able to add, list, Get info, stop work.'
+
   - name: Phone
     description: 'You are able to add, delete, and get_info.'
 
@@ -732,8 +735,6 @@ paths:
           required: true
           schema:
             type: integer
-            minimum: 100000
-            maximum: 999999
             example: 654321
       requestBody:
         content:
@@ -2558,6 +2559,154 @@ paths:
         '404':
           description: 'Dealer is not found'
 
+  '/leads':
+    post:
+      tags:
+        - Lead
+      operationId: addLead
+      description: 'You are able to add lead.'
+      parameters:
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lead'
+            example: 
+              {
+                "external_id": "1234567",
+                "language": "en",
+                "source": "CreditYes",
+                "name_first": "John",
+                "name_middle": "T",
+                "name_last": "Smith",
+                "ssn": "111223333",
+                "credit_permission": "1",
+                "birth_month": "7",
+                "birth_day": "11",
+                "birth_year": "1978",
+                "coapp_relation": "Wife",
+                "coapp_income": "3000",
+                "phone_home": "1112223333",
+                "phone_work": "2223334444",
+                "phone_cell": "3334445555",
+                "preferred_phone": "Home",
+                "confirmation_pref": "Text",
+                "sms_permission": "1",
+                "email_address": "test@example.com",
+                "street_address": "123 Fake St",
+                "city": "Portland",
+                "state": "OR",
+                "zip_code": "99999",
+                "years_at_address": "5",
+                "months_at_address": "2",
+                "residence_status": "Rent",
+                "persons_on_agreement": "2",
+                "housing_payment": "850",
+                "rent_total": "850",
+                "prev_street_address": "321 Fake St",
+                "prev_city": "Portland",
+                "prev_state": "OR",
+                "prev_zip_code": "90000",
+                "years_at_prev_address": "3",
+                "months_at_prev_address": "11",
+                "jobs": {
+                  "job": {
+                    "employer": "My Company",
+                    "occupation": "My Occupation",
+                    "years_at_employer": "5",
+                    "months_at_employer": "2",
+                    "pay_method": "Direct",
+                    "paycheck_type": "Computerized",
+                    "taxes_withheld": "1",
+                    "employment_status": "Permanent",
+                    "monthly_income": "3000"
+                  }
+                },
+                "vehicles": {
+                  "vehicle": [
+                    {
+                      "type": "tradein",
+                      "year": "2016",
+                      "make": "Toyota",
+                      "model": "Corolla",
+                      "vin": "2T1BURHE6GC555164",
+                      "trim": "S Plus",
+                      "chrome_style_id": "376988",
+                      "mileage": "0",
+                      "exterior_color": "Black Sand Pearl",
+                      "interior_color": "Silver",
+                      "condition": "Excellent",
+                      "monthly_payment": "0",
+                      "amount_owed": "0",
+                      "retail": "30000",
+                      "wholesale": "20000",
+                      "book": "15000"
+                    },
+                    {
+                      "type": "interested",
+                      "year": "2016",
+                      "make": "Toyota",
+                      "model": "Sienna",
+                      "vin": "",
+                      "trim": "XLE",
+                      "chrome_style_id": "380706",
+                      "mileage": "0",
+                      "exterior_color": "Red",
+                      "interior_color": "Blue",
+                      "condition": "New"
+                    }
+                  ]
+                },
+                "other_monthly_income": "1000",
+                "years_at_prev_employer": "5",
+                "months_at_prev_employer": "2",
+                "prev_employer": "Previous Company",
+                "employment_gap": "3",
+                "trade_year": "1999",
+                "trade_make": "Pontiac",
+                "trade_model": "Grand Am",
+                "trade_mileage": "95000",
+                "trade_monthly_payment": "300",
+                "trade_color": "Silver",
+                "trade_retail": "3000",
+                "trade_wholesale": "2000",
+                "trade_book": "Blue Book",
+                "military": "0",
+                "military_months_of_service": "0",
+                "military_pay_grade": "",
+                "military_ets": "",
+                "appt_date": "2012-08-30 09:15:00",
+                "notes": "Notes go here",
+                "ip_address": "127.0.0.1",
+                "additional_info": {
+                  "custom1": "Your Custom Data",
+                  "custom2": "Your Custom Data",
+                  "custom3": "Your Custom Data"
+                }
+              }
+      responses:
+        '200':
+          description: 'Lead has been added successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "lead_id": "123456"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
+
   '/phones':
     get:
       tags:
@@ -2571,8 +2720,6 @@ paths:
           required: true
           schema:
             type: integer
-            minimum: 100000
-            maximum: 999999
             example: 654321
       responses:
         '200':
@@ -2608,8 +2755,6 @@ paths:
           required: true
           schema:
             type: integer
-            minimum: 100000
-            maximum: 999999
             example: 654321
       requestBody:
         content:
@@ -2695,8 +2840,6 @@ paths:
           required: true
           schema:
             type: integer
-            minimum: 100000
-            maximum: 999999
             example: 654321
       requestBody:
         content:
@@ -3426,6 +3569,211 @@ components:
           description: '0 = Paused, 1 = Active, 2 = Pending, 3 = Cancelled,  4 = Billing Issue'
           type: integer
           example: 0
+
+    Lead:
+      type: object
+      required:
+        - external_id
+        - name_first
+        - name_last
+      properties:
+        external_id:
+          description: 'Your customer identifier'
+          type: string
+          maxLength: 40
+          example: '1234567'
+        name_first:
+          type: string
+          maxLength: 50
+          example: 'John'
+        name_last:
+          type: string
+          maxLength: 50
+          example: 'Smith'
+        name_middle:
+          description: 'Can be full middle name or initial'
+          type: string
+          maxLength: 50
+          example: 'T'
+        language:
+          description: 'Language spoken by lead'
+          type: string
+          maxLength: 2
+          example: 'en'
+        source:
+          description: 'Lead source'
+          type: string
+          maxLength: 50
+          example: 'CreditYes'
+        ssn:
+          description: 'social security number'
+          type: number
+          minimum: 100000000
+          maximum: 999999999
+          example: 111223333
+        credit_permission:
+          description: 'permission to run credit'
+          type: boolean
+          example: true
+        birthday:
+          description: "Date format:\n\n[year]-[month]-[day]"
+          type: string
+          maxLength: 10
+          format: date
+          example: '1978-7-11'
+        coapp_relation:
+          type: string
+          maxLength: 25
+          example: 'Wife'
+        coapp_income:
+          type: number
+          example: 3000
+        phone_home:
+          type: number
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 1112223333
+        phone_work:
+          type: number
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 2223334444
+        preferred_phone:
+          type: string
+          description: |
+            One of:
+            - Cell
+            - Work
+            - Home
+          example: 'Home'
+        confirmation_pref:
+          type: string
+          description: "Where the lead wants to receive alerts. \n\n One of: \n\n - Text \n\n - Email \n\n - Both"
+          example: 'Text'
+        email:
+          description: 'Email address'
+          type: string
+          format: email
+          maxLength: 100
+          example: 'test@example.com'
+        address:
+          description: 'Street address'
+          type: string
+          maxLength: 100
+          example: '123 Fake St'
+        city:
+          type: string
+          maxLength: 50
+          example: 'Portland'
+        state:
+          type: string
+          maxLength: 2
+          example: 'OR'
+        zip:
+          description: 'Zip code'
+          type: string
+          maxLength: 10
+          example: '99999'
+        rent_total:
+          type: number
+          example: 850
+        prev_address:
+          description: 'Previous street address'
+          type: string
+          maxLength: 100
+          example: '321 Fake St'
+        prev_city:
+          description: 'Previous city'
+          type: string
+          maxLength: 50
+          example: 'Portland'
+        prev_state:
+          description: 'Previous state'
+          type: string
+          maxLength: 2
+          example: 'OR'
+        prev_zip_code:
+          description: 'Previous zip code'
+          type: string
+          maxLength: 10
+          example: '90000'
+        additional_income:
+          description: 'Other monthly income'
+          type: number
+          example: 1000
+        prev_employer:
+          description: 'Previous employer'
+          type: string
+          maxLength: 100
+          example: 'Previous Company'
+        employment_gap:
+          description: 'Employment gap in years'
+          type: integer
+          example: 3
+        trade_year:
+          type: integer
+          example: 1999
+        trade_make:
+          type: string
+          maxLength: 50
+          example: 'Pontiac'
+        trade_model:
+          type: string
+          maxLength: 50
+          example: 'Grand Am'
+        trade_mileage:
+          type: integer
+          example: 95000
+        trade_monthly_payment:
+          description: 'Money format e.g. $475.95'
+          type: number
+          example: 300
+        trade_color:
+          type: string
+          maxLength: 25
+          example: 'Silver'
+        trade_retail:
+          description: 'Money format e.g. 30000.00'
+          type: number
+          example: 3000
+        trade_wholesale:
+          description: 'Money format e.g. 27000.00'
+          type: number
+          example: 2000
+        trade_book:
+          type: string
+          maxLength: 20
+          example: 'Blue Book'
+        military:
+          description: '1 for military, 0 for non-military'
+          type: boolean
+          example: '0'
+        military_length:
+          description: 'Months in military'
+          type: integer
+          example: 0
+        military_pay_grade:
+          type: string
+          maxLength: 15
+        military_ets:
+          description: 'Military Expiration, Term of Service, e.g. 2015-01-31'
+          type: string
+          format: date
+          example: '0000-00-00'
+        appt_date:
+          description: 'Local timezone, appointment date & time'
+          type: string
+          format: date-time
+          example: '2012-08-30 09:15:00'
+        ip_address:
+          description: "Lead's IP address"
+          type: string
+          maxLength: 15
+          example: '127.0.0.1'
+        sms_permission:
+          description: 'Permission to send text message'
+          type: boolean
+          example: '1'
 
     LeadsActivation:
       type: object
