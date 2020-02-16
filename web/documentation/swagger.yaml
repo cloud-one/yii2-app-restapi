@@ -1522,7 +1522,6 @@ paths:
                 additional_info:
                   type: object
                   properties:
-                  
                     field_name:
                       description: 'Custom Field Name'
                       type: string
@@ -1875,7 +1874,6 @@ paths:
                 additional_info:
                   type: object
                   properties:
-                  
                     field_name:
                       description: 'Custom Field Name'
                       type: string
@@ -2563,8 +2561,8 @@ paths:
     post:
       tags:
         - Lead
-      operationId: addLead
-      description: 'You are able to add lead.'
+      operationId: addLeads
+      description: 'You are able to add leads. Currently you can only add 100 leads per instance.'
       parameters:
         - name: campaign_id
           in: header
@@ -2577,62 +2575,257 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Lead'
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Lead'
+                properties:
+                  years_at_address:
+                    type: integer
+                    example: 5
+                  months_at_address:
+                    type: integer
+                    example: 2
+                  years_at_prev_address:
+                    type: integer
+                    example: 3
+                  months_at_prev_address:
+                    type: integer
+                    example: 11
+                  years_at_prev_employer:
+                    type: integer
+                    example: 5
+                  months_at_prev_employer:
+                    type: integer
+                    example: 2
+                  military_months_of_service:
+                    type: integer
+                    example: 0
+                  residence_status:
+                    type: string
+                    description: |
+                      One of:
+                      - Own
+                      - Rent
+                      - Family
+                      - Military
+                    example: 'Rent'
+                  persons_on_agreement:
+                    type: integer
+                    example: 2
+                  housing_payment:
+                    type: number
+                    example: 850
+                  notes:
+                    type: string
+                    example: 'Notes go here'
+                  reservation_code:
+                    description: 'This is for ping/post providers'
+                    type: string
+                    maxLength: 20
+                    example: 'ace post'
+                  schedule_work:
+                    description: 'Schedule Work (0 = no, 1 = yes) for call center agent to call, defaults to 1 if left blank'
+                    type: boolean
+                    default: 1
+                  jobs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employer:
+                          type: string
+                          maxLength: 100
+                          example: 'My Company'
+                        occupation:
+                          type: string
+                          maxLength: 100
+                          example: 'My Occupation'
+                        years_at_employer:
+                          type: integer
+                          example: 5
+                        months_at_employer:
+                          type: integer
+                          example: 2
+                        pay_method:
+                          type: string
+                          description: |
+                            One of:
+                            - Direct
+                            - Check
+                            - Cash
+                            - Both
+                          example: 'Direct'
+                        paycheck_type:
+                          type: string
+                          description: |
+                            One of:
+                            - Computerized
+                            - Hand Written
+                            - Typed
+                          example: 'Computerized'
+                        taxes_withheld:
+                          description: '0 for no, 1 for yes'
+                          type: boolean
+                          example: 1
+                        employment_status:
+                          type: string
+                          description: |
+                            One of:
+                            - Permanent
+                            - Temp
+                            - Seasonal
+                          example: 'Permanent'
+                        monthly_income:
+                          type: number
+                          example: 3000
+                  vehicles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          description: |
+                            One of:
+                            - interested
+                            - own
+                          type: string
+                          maxLength: 50
+                          example: 'interested'
+                        year:
+                          type: integer
+                          minimum: 1000
+                          maximum: 9999
+                          example: 2016
+                        make:
+                          type: string
+                          maxLength: 50
+                          example: 'Toyota'
+                        model:
+                          type: string
+                          maxLength: 50
+                          example: 'Corolla'
+                        trim:
+                          type: string
+                          maxLength: 50
+                          example: 'S Plus'
+                        vin:
+                          type: string
+                          maxLength: 50
+                          example: '2T1BURHE6GC555164'
+                        mileage:
+                          type: number
+                          example: 0
+                        exterior_color:
+                          type: string
+                          maxLength: 50
+                          example: 'Black Sand Pearl'
+                        interior_color:
+                          type: string
+                          maxLength: 50
+                          example: 'Silver'
+                        condition:
+                          description: |
+                            One of:
+                            - Clean
+                            - Excellent
+                            - Good
+                            - Average
+                            - Fair
+                            - Rough
+                          type: string
+                          maxLength: 50
+                          example: 'Excellent'
+                        monthly_payment:
+                          description: 'Money format e.g. 475.95'
+                          type: number
+                          example: 0
+                        amount_owed:
+                          description: 'Money format e.g. 25000.00'
+                          type: number
+                          example: 0
+                        retail:
+                          description: 'Money format e.g. 30000.00'
+                          type: number
+                          example: 30000
+                        wholesale:
+                          description: 'Money format e.g. 27000.00'
+                          type: number
+                          example: 20000
+                        book:
+                          description: 'Money format e.g. 25000.00'
+                          type: number
+                          example: 15000
+                        chrome_style_id:
+                          description: 'Chrome Style ID'
+                          type: integer
+                          example: 376988
+                        payoff_date:
+                          type: string
+                          format: date
+                          example: '2019-01-22'
+                  additional_info:
+                    type: object
+                    properties:
+                      field_name:
+                        description: 'Custom Field Name'
+                        type: string
+                        maxLength: 255
+                        example: 'custom field data'
             example: 
-              {
-                "external_id": "1234567",
-                "language": "en",
-                "source": "CreditYes",
-                "name_first": "John",
-                "name_middle": "T",
-                "name_last": "Smith",
-                "ssn": "111223333",
-                "credit_permission": "1",
-                "birth_month": "7",
-                "birth_day": "11",
-                "birth_year": "1978",
-                "coapp_relation": "Wife",
-                "coapp_income": "3000",
-                "phone_home": "1112223333",
-                "phone_work": "2223334444",
-                "phone_cell": "3334445555",
-                "preferred_phone": "Home",
-                "confirmation_pref": "Text",
-                "sms_permission": "1",
-                "email_address": "test@example.com",
-                "street_address": "123 Fake St",
-                "city": "Portland",
-                "state": "OR",
-                "zip_code": "99999",
-                "years_at_address": "5",
-                "months_at_address": "2",
-                "residence_status": "Rent",
-                "persons_on_agreement": "2",
-                "housing_payment": "850",
-                "rent_total": "850",
-                "prev_street_address": "321 Fake St",
-                "prev_city": "Portland",
-                "prev_state": "OR",
-                "prev_zip_code": "90000",
-                "years_at_prev_address": "3",
-                "months_at_prev_address": "11",
-                "jobs": {
-                  "job": {
-                    "employer": "My Company",
-                    "occupation": "My Occupation",
-                    "years_at_employer": "5",
-                    "months_at_employer": "2",
-                    "pay_method": "Direct",
-                    "paycheck_type": "Computerized",
-                    "taxes_withheld": "1",
-                    "employment_status": "Permanent",
-                    "monthly_income": "3000"
-                  }
-                },
-                "vehicles": {
-                  "vehicle": [
+              [
+                {
+                  "external_id": "1234567",
+                  "language": "en",
+                  "name_first": "John",
+                  "name_middle": "T",
+                  "name_last": "Smith",
+                  "ssn": "111223333",
+                  "credit_permission": "1",
+                  "birth_month": "7",
+                  "birth_day": "11",
+                  "birth_year": "1978",
+                  "coapp_relation": "Wife",
+                  "coapp_income": "3000",
+                  "phone_home": "1112223333",
+                  "phone_work": "2223334444",
+                  "phone_cell": "3334445555",
+                  "preferred_phone": "Home",
+                  "confirmation_pref": "Text",
+                  "email_address": "test@example.com",
+                  "street_address": "123 Fake St",
+                  "city": "Portland",
+                  "state": "OR",
+                  "zip_code": "99999",
+                  "years_at_address": "5",
+                  "months_at_address": "2",
+                  "residence_status": "Rent",
+                  "persons_on_agreement": "2",
+                  "housing_payment": "850",
+                  "rent_total": "850",
+                  "prev_street_address": "321 Fake St",
+                  "prev_city": "Portland",
+                  "prev_state": "OR",
+                  "prev_zip_code": "90000",
+                  "years_at_prev_address": "3",
+                  "months_at_prev_address": "11",
+                  "jobs": [
                     {
-                      "type": "tradein",
+                      "employer": "My Company",
+                      "occupation": "My Occupation",
+                      "years_at_employer": "5",
+                      "months_at_employer": "2",
+                      "pay_method": "Direct",
+                      "paycheck_type": "Computerized",
+                      "taxes_withheld": "1",
+                      "employment_status": "Permanent",
+                      "monthly_income": "3000"
+                    }
+                  ],
+                  "vehicles": [
+                    {
+                      "type": "interested",
                       "year": "2016",
                       "make": "Toyota",
                       "model": "Corolla",
@@ -2662,44 +2855,142 @@ paths:
                       "interior_color": "Blue",
                       "condition": "New"
                     }
-                  ]
+                  ],
+                  "other_monthly_income": "1000",
+                  "years_at_prev_employer": "5",
+                  "months_at_prev_employer": "2",
+                  "prev_employer": "Previous Company",
+                  "employment_gap": "3",
+                  "trade_year": "1999",
+                  "trade_make": "Pontiac",
+                  "trade_model": "Grand Am",
+                  "trade_mileage": "95000",
+                  "trade_monthly_payment": "300",
+                  "trade_color": "Silver",
+                  "trade_retail": "3000",
+                  "trade_wholesale": "2000",
+                  "trade_book": "Blue Book",
+                  "military": "0",
+                  "military_months_of_service": "0",
+                  "military_pay_grade": "",
+                  "military_ets": "",
+                  "appt_date": "2012-08-30 09:15:00",
+                  "notes": "Notes go here",
+                  "ip_address": "127.0.0.1"
                 },
-                "other_monthly_income": "1000",
-                "years_at_prev_employer": "5",
-                "months_at_prev_employer": "2",
-                "prev_employer": "Previous Company",
-                "employment_gap": "3",
-                "trade_year": "1999",
-                "trade_make": "Pontiac",
-                "trade_model": "Grand Am",
-                "trade_mileage": "95000",
-                "trade_monthly_payment": "300",
-                "trade_color": "Silver",
-                "trade_retail": "3000",
-                "trade_wholesale": "2000",
-                "trade_book": "Blue Book",
-                "military": "0",
-                "military_months_of_service": "0",
-                "military_pay_grade": "",
-                "military_ets": "",
-                "appt_date": "2012-08-30 09:15:00",
-                "notes": "Notes go here",
-                "ip_address": "127.0.0.1",
-                "additional_info": {
-                  "custom1": "Your Custom Data",
-                  "custom2": "Your Custom Data",
-                  "custom3": "Your Custom Data"
+                {
+                  "external_id": "1234567",
+                  "name_first": "John",
+                  "name_last": "Doe",
+                  "credit_permission": "1",
+                  "birth_month": "7",
+                  "birth_day": "11",
+                  "birth_year": "1978",
+                  "coapp_relation": "Wife",
+                  "coapp_income": "3000",
+                  "phone_home": "1112223333",
+                  "phone_work": "2223334444",
+                  "phone_cell": "3334445555",
+                  "preferred_phone": "Home",
+                  "confirmation_pref": "Text",
+                  "email_address": "test@example.com",
+                  "street_address": "123 Fake St",
+                  "city": "Portland",
+                  "state": "OR",
+                  "zip_code": "99999",
+                  "years_at_address": "5",
+                  "months_at_address": "2",
+                  "residence_status": "Rent",
+                  "persons_on_agreement": "2",
+                  "housing_payment": "850",
+                  "rent_total": "850",
+                  "prev_street_address": "321 Fake St",
+                  "prev_city": "Portland",
+                  "prev_state": "OR",
+                  "prev_zip_code": "90000",
+                  "years_at_prev_address": "3",
+                  "months_at_prev_address": "11",
+                  "jobs": [
+                    {
+                      "employer": "My Company",
+                      "occupation": "My Occupation",
+                      "years_at_employer": "5",
+                      "months_at_employer": "2",
+                      "pay_method": "Direct",
+                      "paycheck_type": "Computerized",
+                      "taxes_withheld": "1",
+                      "employment_status": "Permanent",
+                      "monthly_income": "3000"
+                    }
+                  ],
+                  "vehicles": [
+                    {
+                      "type": "interested",
+                      "year": "2016",
+                      "make": "Toyota",
+                      "model": "Corolla",
+                      "vin": "2T1BURHE6GC555164",
+                      "trim": "S Plus",
+                      "chrome_style_id": "376988",
+                      "mileage": "0",
+                      "exterior_color": "Black Sand Pearl",
+                      "interior_color": "Silver",
+                      "condition": "Excellent",
+                      "monthly_payment": "0",
+                      "amount_owed": "0",
+                      "retail": "30000",
+                      "wholesale": "20000",
+                      "book": "15000"
+                    },
+                    {
+                      "type": "interested",
+                      "year": "2016",
+                      "make": "Toyota",
+                      "model": "Sienna",
+                      "vin": "",
+                      "trim": "XLE",
+                      "chrome_style_id": "380706",
+                      "mileage": "0",
+                      "exterior_color": "Red",
+                      "interior_color": "Blue",
+                      "condition": "New"
+                    }
+                  ],
+                  "other_monthly_income": "1000",
+                  "years_at_prev_employer": "5",
+                  "months_at_prev_employer": "2",
+                  "prev_employer": "Previous Company",
+                  "employment_gap": "3",
+                  "military": "0",
+                  "military_months_of_service": "0",
+                  "military_pay_grade": "",
+                  "military_ets": "",
+                  "appt_date": "2012-08-30 09:15:00",
+                  "notes": "Notes go here",
+                  "ip_address": "127.0.0.1",
+                  "additional_info": {
+                    "custom1": "Your Custom Data",
+                    "custom2": "Your Custom Data",
+                    "custom3": "Your Custom Data"
+                  }
                 }
-              }
+              ]
       responses:
         '200':
-          description: 'Lead has been added successfully'
+          description: 'Leads has been added successfully'
           content:
             application/json:
               example: 
-                {
-                  "lead_id": "123456"
-                }
+                [
+                  {
+                    "lead_id": "123456",
+                    "external_id": "1234567"
+                  },
+                  {
+                    "lead_id": "123457",
+                    "external_id": "2345678"
+                  }
+                ]
         '400':
           $ref: "#/components/responses/BadRequestError"
         '401':
@@ -3638,6 +3929,11 @@ components:
           minimum: 1000000000
           maximum: 9999999999
           example: 2223334444
+        phone_cell:
+          type: number
+          minimum: 1000000000
+          maximum: 9999999999
+          example: 3334445555
         preferred_phone:
           type: string
           description: |
