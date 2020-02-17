@@ -3048,206 +3048,286 @@ paths:
             example: 123456
       responses:
         '200':
-          description: 'Returns lead info'
+          # TODO: Check latest updates for disposition_id values
+          # Genareted with https://tableconvert.com/
+          description: |
+            Returns lead info.
+
+            <details>
+              <summary>
+                **disposition_id** values table(Click to expand)
+              </summary>
+
+              DISPOSITION ID (disposition_id) | TITLE | DESCRIPTION
+              ---|---|---
+              0 | In Queue |
+              1 | Appointment Set | This is an auto disposition whenever a call ends with an appointment successfully set.  If this disposition is used, notification will be sent to customer and dealership of appt date/time.
+              2 | Appointment Reschedule | This is an auto disposition whenever an appointment is rescheduled.  If this disposition is used, notification will be sent to caller and dealership of appt reschedule date/time.
+              3 | Appointment With No Date | Auto Disposition from Not Ready Button:  This disposition is used for the customer who states they will go into the dealership but are unwilling to commit to a specific date or time.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              10 | Appointment Confirmed | This disposition is used if a customer calls in after an appt is set and needs any add'l information about their appt.  For example: they are on the way to the dealership and need the address/directions/phone number/contact name.  Using this disposition will keep the lead in "Appointment Set" status without resending alerts.
+              15 | Appointment Showed | This disposition is used if a customer showed for appointment if the dealer marked it as a no show. Using this disposition will keep the lead in "Appointment Set" status without resending alerts.
+              100 | Check with Spouse | Auto Disposition from Not Ready Button:  To be used if someone needs to check with their significant other or check their schedule before setting appt.  Any time this disposition is used it requires a follow up scheduled.  If this disposition is used, the application will stay in our system until follow up call is made.
+              101 | Check Schedule | This is an auto disposition from the NOT READY button, but is also available from the main disposition drop down.  Any time this disposition is used it requires a follow up scheduled
+              103 | Scheduled Call Back | This is to be used for the customer who doesn't have time to talk and needs us to call them back at a later date or time.  Any time this disposition is used it requires a follow up scheduled.  If this disposition is used, the application will stay in our system until follow up call is made.
+              106 | Dealership In Contact | This disposition is to be used if the customer states they are all ready working with our dealership.  Customer's name and phone number should still be obtained/verified.  If this disposition is used, application will be sent to dealership as is.
+              107 | Application Complete | This disposition is used if we have completed the application process with the customer and are submitting their completed application to the BAMA underwriting dept for approval.  Using this disposition will send the lead to BAMA underwriting for approval.
+              108 | Approval Notification Complete | This disposition is used if we have completed the approval notification process and collected the credit card information to process the application fee.  Using this disposition will send the lead to BAMA underwriting for payment processing.
+              109 | Credit Approved - Waiting on Vehicle Inventory | This is an auto disposition whenever a customer is approved for program, but there are not any vehicles currently available in their driving market.
+              132 | Interested Without Appointment | Interested Without Appointment
+              203 | Serviced Elsewhere | The customer has their vehicle serviced somewhere else other than the dealership.
+              206 | Customer Needs Transportation | Auto Disposition from Not Ready Button:  This is to be used for the customer who says they do not have a way to the dealership.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              211 | Customer Distance From Dealership is a Factor | Auto Disposition from Not Ready Button:  This is to be used for the customer who states that the dealership is too far away from them.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              213 | Other | Auto Disposition from Not Ready Button:   This disposition is to be used when a customer says I want to speak with the dealer/dealership before committing to an appt for any reason other than the above listed options.  If you use this disposition, there should be a note stating the customer's reason for wanting to talk with dealership first.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              214 | Approval before I come in | Auto Disposition from Not Ready Button:   This is to be used for the customer who wants an approval or specific numbers such as interest rate/down payment amt/etc  before going into the dealership.   If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              218 | Had a bad experience with Dealer | Auto Disposition from Not Ready Button:   This is to be used when the customer states they or someone they know has been to this dealership previously and it did not go well for whatever reason. Make any applicable notes to customer's concerns.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              219 | Specific Vehicle | Auto Disposition from Not Ready Button:   This is to be used when a customer questions inventory because they are looking for something specific.  Note what vehicle or type of vehicle they are looking for in the NOTES section.  If this disposition is used, application will be sent to dealership as is and customer will be sent dealership's information.
+              222 | Customer Interested in Gift Card or Prize Only | This disposition should be used if the caller is only interested in the prize, drawing or gift card offered on the direct mail invitation and is unwilling to set an appointment in order to claim their prize at the dealership.  If this disposition is used, application will be sent to dealership as is.
+              223 | In the Market at a Future Date | This disposition should be used if the customer says they are not looking to buy until a future date (further than 30 days out).  Note should give a time frame, if given.  If this disposition is used, application will be sent to dealership as is.
+              229 | Under Age of 21 |
+              230 | Checking Status of Application | This disposition is used if we have completed the application process with the customer and they are calling back in because they have not heard if they are approved or denied from underwriting yet.  Using this disposition will notify us that customer is still waiting to hear on their approval status.
+              250 | Uber ID Not Found | This disposition is used if we searched by email and or phone number and were not able to find the uber id.
+              251 | Out of State License | This disposition is to be used if the driver has a current driver's license that is different than the state they are currently living/driving in, excluding exceptions in market crossover.
+              252 | Need Landlord/Mortgage Info | This disposition should be used when the customer does not have the contact information to verify with the landlord/mortgage holder.  The customer will need to call us back with that information to complete the application for submission.
+              253 | Need Employer Phone Number | This disposition should be used when the customer does not have their employer's phone number.  The customer will need to call us back with that information to complete the application for submission.
+              254 | Address Doesn't Match Driver's License | This disposition is used if the lead is in PA or GA and the address on their driver's license doesn't match their home address
+              255 | Event Ended | Caller called in to make an appointment after event has ended.
+              256 | Needs to Check Schedule | Customer will call back to make an appointment.
+              260 | Outside Financing |
+              304 | Inquiry - No Info Gathered | This disposition should be used if a customer calls in but only has questions they want answered and are unwilling to give us the basic information we need in order to send application to dealership.  If we are unable to collect mailer code/zip code, name and phone number before call ends, we cannot send to dealer and should therefore  use this disposition.  Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              314 | No longer interested |
+              350 | Opt Out | This disposition should be used if the customer specifically says "Take me off your list" or "Opt me out".    (If it is a mailer campaign, we still need to collect mailer number to verify name on mailer.  Please make sure to inform caller of the Opt out number on the bottom of the mailer in order to opt out of receiving any additional mailers.  Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              360 | Credit Denied | This disposition is an auto disposition that is used when the driver's application has been processed by underwriting has been denied.
+              400 | No Answer | OUTBOUND DISPOSITION:  This disposition is used when a dialed number just rings or rings and drops without any voice mail message or option to leave a message for customer.  Using this disposition will cause an auto follow up call to be scheduled based on the current status of the outbound call cycle.
+              401 | Left Voicemail | OUTBOUND DISPOSITION:  This disposition is used when a message is left on a voice mail or answering machine for a customer.   Using this disposition will cause an auto follow up call to be scheduled based on the current status of the outbound call cycle.
+              404 | Left Message With Someone Else | OUTBOUND DISPOSITION:  This disposition is used when we leave a message with a live person who has stated customer is not available to come to phone.  If this disposition is used, it will require a scheduled call back time be set.   If this disposition is used, the call cycle will be placed on hold until scheduled follow up call is made.
+              405 | Temporarily Disconnected Number | OUTBOUND DISPOSITION:  This disposition should be used if the number you have called has temporarily been disconnected or is not in service. Using this disposition will automatically schedule a call back for 48 hours. If the phone is still disconnected at the time of that call, the call should then be dispositioned as Disconnected Number.
+              406 | Voicemail Box Not Set Up Yet Or Full | OUTBOUND DISPOSITION:  This disposition is used if when calling the customer a voice mail cannot be left because their voice mail box has not been set up yet.   Using this disposition will cause an auto follow up call to be scheduled based on the current status of the outbound call cycle.
+              407 | Customer Accidentally Dialed Us | This disposition is to be used for an active lead where the customer says "Sorry - I called the wrong number!" or pocket calls us.   (An active lead is a lead where there is a customer name in the lead.)  Using this disposition will keep the lead in its current outbound call cycle status and disposition.
+              408 | No Message Left | OUTBOUND DISPOSITION:  This disposition is used on the 2nd/3rd/4th call of the day after a message has all ready been left.  We only leave one message per phone number listed per day.  After that, all calls made get disconnected if and when voice mail comes on.   Using this disposition will cause an auto follow up call to be scheduled based on the current status of the outbound call cycle.
+              410 | Gift Card Redemption | This disposition is used when a lead calls in to redeem their gift card because the dealer did not do it.
+              471 | No Dealer | This is an auto disposition that occurs if we do not currently have a dealer in the caller's local area.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              474 | Inbound Dropped Call | This disposition is used if an inbound call drops at any point during the call for any reason.  Even if you are 100% certain the customer hung up, always assume the call dropped.  When using this disposition, note the acct of current status of application/call and that call dropped.  Please never put "Customer Hung Up".  Using this disposition will cause this lead to be moved to the top of our Outgoing Work queue so that an outbound call can be placed to the customer to attempt to complete app/set appt.
+              475 | Need Spanish Speaking Agent | This disposition is to be used for a customer who needs a Spanish speaking agent.  Using this disposition will flag this lead as a Spanish lead and move it to Outgoing work for Spanish queue to follow up.
+              476 | Queued Call Hang Up | This disposition should be used if you answer an inbound queued call and all you hear is our hold music.
+              500 | Followup Complete | This disposition is to be used when the appt follow up has been completed.  We have spoken with the customer, collected information about their experience and no additional follow up needs to happen.
+              501 | Scheduled Call Back | This disposition is to be used when a customer requests a call back at a later date or time to complete the appointment follow up call.  Using this disposition will require a scheduled call back.
+              503 | Still in Progress With Dealer | This disposition is to be used when a customer is still actively working with the dealer to finalize their deal.  This is a deal in progress and we will want to follow up with this customer at a later date to learn the final outcome if their interaction with dealership.  Using this disposition will require a scheduled call back be set.
+              504 | In Market At Future Date | This disposition is to be used for a person who does not want to reschedule as they have decided to purchase a car at a future date. If possible, note time frame of expected purchase.
+              601 | Wrong Number | This is for an inbound blank lead where caller was trying to reach someone other than our company.    Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              602 | Not a Valid Number for Customer | OUTBOUND DISPOSITION:  This disposition is to be used when we call a number listed for a customer and the number is a working number, but customer listed on application is not reachable at it.  Using this disposition will mark this as an Invalid lead that will result in no further calls being made, credit requested for the lead and the dealer not receiving application.
+              603 | Disconnected Number | OUTBOUND DISPOSITION:  This disposition is to be used if a number listed for a customer is not a working number.  Using this disposition will mark this as an Invalid lead that will result in no further calls being made, credit requested for the lead and the dealer not receiving application.
+              604 | Number Does not Accept Incoming Calls | OUTBOUND DISPOSITION:  This disposition is to be used when we call a number listed for a customer and get the automated message "At the subscriber's request, this number does not accept incoming calls.".  Using this disposition will mark this as an Invalid lead that will result in no further calls being made, credit requested for the lead and the dealer not receiving application.
+              606 | Did Not Fill Out Any Online Application | PRIMARILY USED ON OUTBOUND CALLS.   This disposition is used for the customer who states they are not in the market for a vehicle and they did not fill out any form of online application.    Using this disposition will mark this as an Invalid lead that will result in no further calls being made, credit requested for the lead and the dealer not receiving application.
+              607 | Blocked Number | PRIMARILY USED ON OUTBOUND CALLS.   This disposition is used for the customer whose phone number is blocked
+              608 | Personal Loan | This disposition is to be used for the customer who thinks they are applying for anything other than a car loan such as a personal loan or payday loan.  It is also used for the customer who filled out an online application, but thought it was for something other than a car loan.  For example:  to win a free car or an Ipad.   In addition,  for mailer campaigns, if caller thinks mailer received is a  credit card offer.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              609 | Credit Card Inquiry | This disposition is to be used for the customer who thinks they are applying for anything other than a car loan such as a personal loan or payday loan.  It is also used for the customer who filled out an online application, but thought it was for something other than a car loan.  For example:  to win a free car or an Ipad.   In addition,  for mailer campaigns, if caller thinks mailer received is a  credit card offer.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              611 | Just Bought a Car | PRIMARILY USED ON OUTBOUND CALLS.  This disposition should be used for the customer who states they did submit an application online, but they have since bought a car.  We should attempt to find out when they bought the car (specifics), if possible.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              612 | Not Enough Income | This disposition should be used for the customer who does not make the minimum income as specified by the dealer.
+              614 | Not in the Market for an Auto Loan | This disposition should be used if customer did submit an application online for auto financing, but they have since reconsidered or changed their mind and are no longer interested in getting pre-qualified for a vehicle.  This should be used at the beginning of a call for an application that we were unable to verify.  PRIMARILY USED ON OUTBOUND CALLS.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+              615 | No Job |
+              616 | Under Age of 18 |
+              750 | Support Request | This is for a dealership that calls in looking for support or wants to find out more about Credit Yes.  This should also be used if someone calls in wanting administrative support such as verification of employment or Accounts Payable/Receivable.
+              999 | Test Lead | This disposition is to be used for a test call.  When new campaigns are being set up, a test call is placed to verify the phone number is correct.   Using this disposition will mark this as a cold lead that will result in no further calls being made and the dealer not receiving this lead.
+            </details>
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/Lead'
-                properties:
-                  years_at_address:
-                    type: integer
-                    example: 5
-                  months_at_address:
-                    type: integer
-                    example: 2
-                  years_at_prev_address:
-                    type: integer
-                    example: 3
-                  months_at_prev_address:
-                    type: integer
-                    example: 11
-                  years_at_prev_employer:
-                    type: integer
-                    example: 5
-                  months_at_prev_employer:
-                    type: integer
-                    example: 2
-                  military_months_of_service:
-                    type: integer
-                    example: 0
-                  residence_status:
-                    type: string
-                    description: |
-                      One of:
-                      - Own
-                      - Rent
-                      - Family
-                      - Military
-                    example: 'Rent'
-                  persons_on_agreement:
-                    type: integer
-                    example: 2
-                  housing_payment:
-                    type: number
-                    example: 850
-                  notes:
-                    type: string
-                    example: 'Notes go here'
-                  reservation_code:
-                    description: 'This is for ping/post providers'
-                    type: string
-                    maxLength: 20
-                    example: 'ace post'
-                  schedule_work:
-                    description: 'Schedule Work (0 = no, 1 = yes) for call center agent to call, defaults to 1 if left blank'
-                    type: boolean
-                    default: 1
-                  jobs:
-                    type: array
-                    items:
+                  type: object
+                  allOf:
+                    - $ref: '#/components/schemas/Lead'
+                  properties:
+                    years_at_address:
+                      type: integer
+                      example: 5
+                    months_at_address:
+                      type: integer
+                      example: 2
+                    years_at_prev_address:
+                      type: integer
+                      example: 3
+                    months_at_prev_address:
+                      type: integer
+                      example: 11
+                    years_at_prev_employer:
+                      type: integer
+                      example: 5
+                    months_at_prev_employer:
+                      type: integer
+                      example: 2
+                    military_months_of_service:
+                      type: integer
+                      example: 0
+                    residence_status:
+                      type: string
+                      description: |
+                        One of:
+                        - Own
+                        - Rent
+                        - Family
+                        - Military
+                      example: 'Rent'
+                    persons_on_agreement:
+                      type: integer
+                      example: 2
+                    housing_payment:
+                      type: number
+                      example: 850
+                    notes:
+                      type: string
+                      example: 'Notes go here'
+                    reservation_code:
+                      description: 'This is for ping/post providers'
+                      type: string
+                      maxLength: 20
+                      example: 'ace post'
+                    schedule_work:
+                      description: 'Schedule Work (0 = no, 1 = yes) for call center agent to call, defaults to 1 if left blank'
+                      type: boolean
+                      default: 1
+                    jobs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          employer:
+                            type: string
+                            maxLength: 100
+                            example: 'My Company'
+                          occupation:
+                            type: string
+                            maxLength: 100
+                            example: 'My Occupation'
+                          years_at_employer:
+                            type: integer
+                            example: 5
+                          months_at_employer:
+                            type: integer
+                            example: 2
+                          pay_method:
+                            type: string
+                            description: |
+                              One of:
+                              - Direct
+                              - Check
+                              - Cash
+                              - Both
+                            example: 'Direct'
+                          paycheck_type:
+                            type: string
+                            description: |
+                              One of:
+                              - Computerized
+                              - Hand Written
+                              - Typed
+                            example: 'Computerized'
+                          taxes_withheld:
+                            description: '0 for no, 1 for yes'
+                            type: boolean
+                            example: 1
+                          employment_status:
+                            type: string
+                            description: |
+                              One of:
+                              - Permanent
+                              - Temp
+                              - Seasonal
+                            example: 'Permanent'
+                          monthly_income:
+                            type: number
+                            example: 3000
+                    vehicles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            description: |
+                              One of:
+                              - interested
+                              - own
+                            type: string
+                            maxLength: 50
+                            example: 'interested'
+                          year:
+                            type: integer
+                            minimum: 1000
+                            maximum: 9999
+                            example: 2016
+                          make:
+                            type: string
+                            maxLength: 50
+                            example: 'Toyota'
+                          model:
+                            type: string
+                            maxLength: 50
+                            example: 'Corolla'
+                          trim:
+                            type: string
+                            maxLength: 50
+                            example: 'S Plus'
+                          vin:
+                            type: string
+                            maxLength: 50
+                            example: '2T1BURHE6GC555164'
+                          mileage:
+                            type: number
+                            example: 0
+                          exterior_color:
+                            type: string
+                            maxLength: 50
+                            example: 'Black Sand Pearl'
+                          interior_color:
+                            type: string
+                            maxLength: 50
+                            example: 'Silver'
+                          condition:
+                            description: |
+                              One of:
+                              - Clean
+                              - Excellent
+                              - Good
+                              - Average
+                              - Fair
+                              - Rough
+                            type: string
+                            maxLength: 50
+                            example: 'Excellent'
+                          monthly_payment:
+                            description: 'Money format e.g. 475.95'
+                            type: number
+                            example: 0
+                          amount_owed:
+                            description: 'Money format e.g. 25000.00'
+                            type: number
+                            example: 0
+                          retail:
+                            description: 'Money format e.g. 30000.00'
+                            type: number
+                            example: 30000
+                          wholesale:
+                            description: 'Money format e.g. 27000.00'
+                            type: number
+                            example: 20000
+                          book:
+                            description: 'Money format e.g. 25000.00'
+                            type: number
+                            example: 15000
+                          chrome_style_id:
+                            description: 'Chrome Style ID'
+                            type: integer
+                            example: 376988
+                          payoff_date:
+                            type: string
+                            format: date
+                            example: '2019-01-22'
+                    additional_info:
                       type: object
                       properties:
-                        employer:
+                        field_name:
+                          description: 'Custom Field Name'
                           type: string
-                          maxLength: 100
-                          example: 'My Company'
-                        occupation:
-                          type: string
-                          maxLength: 100
-                          example: 'My Occupation'
-                        years_at_employer:
-                          type: integer
-                          example: 5
-                        months_at_employer:
-                          type: integer
-                          example: 2
-                        pay_method:
-                          type: string
-                          description: |
-                            One of:
-                            - Direct
-                            - Check
-                            - Cash
-                            - Both
-                          example: 'Direct'
-                        paycheck_type:
-                          type: string
-                          description: |
-                            One of:
-                            - Computerized
-                            - Hand Written
-                            - Typed
-                          example: 'Computerized'
-                        taxes_withheld:
-                          description: '0 for no, 1 for yes'
-                          type: boolean
-                          example: 1
-                        employment_status:
-                          type: string
-                          description: |
-                            One of:
-                            - Permanent
-                            - Temp
-                            - Seasonal
-                          example: 'Permanent'
-                        monthly_income:
-                          type: number
-                          example: 3000
-                  vehicles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        type:
-                          description: |
-                            One of:
-                            - interested
-                            - own
-                          type: string
-                          maxLength: 50
-                          example: 'interested'
-                        year:
-                          type: integer
-                          minimum: 1000
-                          maximum: 9999
-                          example: 2016
-                        make:
-                          type: string
-                          maxLength: 50
-                          example: 'Toyota'
-                        model:
-                          type: string
-                          maxLength: 50
-                          example: 'Corolla'
-                        trim:
-                          type: string
-                          maxLength: 50
-                          example: 'S Plus'
-                        vin:
-                          type: string
-                          maxLength: 50
-                          example: '2T1BURHE6GC555164'
-                        mileage:
-                          type: number
-                          example: 0
-                        exterior_color:
-                          type: string
-                          maxLength: 50
-                          example: 'Black Sand Pearl'
-                        interior_color:
-                          type: string
-                          maxLength: 50
-                          example: 'Silver'
-                        condition:
-                          description: |
-                            One of:
-                            - Clean
-                            - Excellent
-                            - Good
-                            - Average
-                            - Fair
-                            - Rough
-                          type: string
-                          maxLength: 50
-                          example: 'Excellent'
-                        monthly_payment:
-                          description: 'Money format e.g. 475.95'
-                          type: number
-                          example: 0
-                        amount_owed:
-                          description: 'Money format e.g. 25000.00'
-                          type: number
-                          example: 0
-                        retail:
-                          description: 'Money format e.g. 30000.00'
-                          type: number
-                          example: 30000
-                        wholesale:
-                          description: 'Money format e.g. 27000.00'
-                          type: number
-                          example: 20000
-                        book:
-                          description: 'Money format e.g. 25000.00'
-                          type: number
-                          example: 15000
-                        chrome_style_id:
-                          description: 'Chrome Style ID'
-                          type: integer
-                          example: 376988
-                        payoff_date:
-                          type: string
-                          format: date
-                          example: '2019-01-22'
-                  additional_info:
-                    type: object
-                    properties:
-                      field_name:
-                        description: 'Custom Field Name'
-                        type: string
-                        maxLength: 255
-                        example: 'custom field data'
+                          maxLength: 255
+                          example: 'custom field data'
               example: 
                 {
                   "campaign_id": "8",
@@ -3391,6 +3471,64 @@ paths:
                 }
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Lead is not found'
+    put:
+      tags:
+        - Lead
+      operationId: updateLeadById
+      description: 'Currently we only allow update of the additional_info section of the lead. We will only update the additional info fields that are passed and if new fields are found they will be added to the lead.'
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - additional_info
+              properties:
+                additional_info:
+                  type: object
+                  properties:
+                    field_name:
+                      description: 'Custom Field Name'
+                      type: string
+                      maxLength: 255
+                      example: 'custom field data'
+            example:
+              {
+                "additional_info": {
+                  "custom1": "Update Data",
+                  "custom2": "New Data",
+                  "custom3": "New Data"
+                }
+              }
+        description: 'Lead additional info'
+      responses:
+        '200':
+          description: 'Lead additional info has been updated successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "lead_id": "123456",
+                  "additional_info": {
+                    "custom1": "Update Data",
+                    "custom2": "New Data",
+                    "custom3": "New Data"
+                  }
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Lead is not found'
 
