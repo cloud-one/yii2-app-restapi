@@ -3434,7 +3434,7 @@ paths:
                     {
                       "date": "2012-03-17 19:57:52",
                       "agent": "John E",
-                      "note": "Additional $220\/month income from child support."
+                      "note": "Additional $220/month income from child support."
                     }
                   ],
                   "disposition": "Dealer Needs to Call Back",
@@ -3443,7 +3443,7 @@ paths:
                     {
                       "date": "2016-03-17 19:49:21",
                       "agent": "John E",
-                      "recording": "https:\/\/92295f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/RE22fd5c4e8d1589c73388ad1ec18b7b97.mp3",
+                      "recording": "https://92295f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com/RE22fd5c4e8d1589c73388ad1ec18b7b97.mp3",
                       "lead_phone": "5031113333",
                       "direction": "Inbound",
                       "duration": "480",
@@ -3531,6 +3531,65 @@ paths:
            $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Lead is not found'
+  '/leads/{id}/stop_work':
+    put:
+      tags:
+        - Lead
+      operationId: stopLeadsWorkById
+      description: 'You are able to stop outgoing work for lead.'
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field or external_lead_id'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      responses:
+        '200':
+          description: 'Lead outgoing work has been stoped successfully'
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Lead is not found'
+  '/leads/{id}/appointment_no_show':
+    put:
+      tags:
+        - Lead
+      operationId: rescheduleLeadAppointmentById
+      description: 'You are able to reschedule lead appointment.'
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                call_date:
+                  description: 'Specific time must be in the lead timezone, defaults to current date and time if left blank'
+                  type: string
+                  format: date-time
+                  example: '0000-00-00 00:00:00'
+            example:
+              {
+                "call_date": "0000-00-00 00:00:00"
+              }
+      responses:
+        '200':
+           description: 'Call Center Work Scheduled'
+        '400':
+           description: "One of: \n - Call time cannot be before current time \n - Lead does not have an appointment date \n - Lead appointment time has not passed yet \n - Lead appointment was too long ago \n - Over appointment no show limit"
+        '401':
+           $ref: "#/components/responses/UnauthorizedError"
+        '404':
+           description: 'Lead is not found'
 
   '/phones':
     get:
