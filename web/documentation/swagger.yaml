@@ -785,6 +785,126 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Campaign is not found'
+  '/leads/{id}/action':
+    post:
+      tags:
+        - hidden
+      operationId: applyLeadActionById
+      description: 'You are able to apply lead action by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - action
+              properties:
+                action:
+                  type: string
+                  example: 'Campaign Report'
+              example: 
+                {
+                  "action": "Campaign Report"
+                }
+        description: 'Action to apply'
+      responses:
+        '200':
+          description: 'Campaign Report'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                  response:
+                    type: string
+                  contact:
+                    type: string
+                  contact_summary:
+                    type: string
+              example:
+                {
+                  "summary": "",
+                  "response": "",
+                  "contact": "",
+                  "contact_summary": ""
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Lead or Campaign ID is not found'
+  '/leads/{id}/send_followup':
+    get:
+      tags:
+        - hidden
+      operationId: sendFollowupLeadById
+      description: 'You are able to send followup for lead by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+        - name: destination
+          in: query
+          description: 'url field'
+          required: true
+          schema:
+            type: string
+        - name: debug
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Followup data'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  external_id:
+                    type: string
+                  lead_id:
+                    type: string
+                  followup_date:
+                    type: string
+                  followup:
+                    type: string
+              example:
+                {
+                  "external_id": "",
+                  "lead_id": "",
+                  "followup_date": "",
+                  "followup": ""
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Lead is not found'
 
   '/activations':
     post:
