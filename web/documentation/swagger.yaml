@@ -905,6 +905,286 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Lead is not found'
+  '/leads/{id}/send_lead':
+    get:
+      tags:
+        - hidden
+      operationId: sendLeadById
+      description: |
+        You are able to send lead info to destination url.\
+        \
+        Possible lead_status:
+        - Appointment
+        - In Contact
+        - Transferred To Dealer
+        - Dealer Needs To Call Back
+        - Not Interested
+        - Appointment Canceled
+        - Opt Out
+        - No Contact
+        - Duplicate Lead
+        - Invalid Lead
+        
+        <details>
+          <summary>
+            **Sample POST** (Click to expand)
+          </summary>
+          ```
+          {
+            "action": "New Lead",
+            "test_mode": "1",
+            "external_id": "1234567",
+            "campaign_id": "8",
+            "external_campaign_id": "",
+            "customer_id": "",
+            "external_customer_id": "",
+            "lead_id": "1234",
+            "time_zone": "US\/Pacific",
+            "language": "en",
+            "source": "CreditYes",
+            "name_first": "John",
+            "name_middle": "T",
+            "name_last": "Smith",
+            "ssn": "111223333",
+            "credit_permission": "1",
+            "birth_month": "7",
+            "birth_day": "11",
+            "birth_year": "1978",
+            "coapp_relation": "Wife",
+            "coapp_income": "3000",
+            "phone_home": "1112223333",
+            "phone_work": "2223334444",
+            "phone_cell": "3334445555",
+            "preferred_phone": "Home",
+            "confirmation_pref": "Text",
+            "email_address": "test@example.com",
+            "street_address": "123 Fake St",
+            "city": "Portland",
+            "state": "OR",
+            "zip_code": "99999",
+            "years_at_address": "5",
+            "months_at_address": "2",
+            "residence_status": "Rent",
+            "persons_on_agreement": "2",
+            "housing_payment": "850",
+            "rent_total": "850",
+            "prev_street_address": "321 Fake St",
+            "prev_city": "Portland",
+            "prev_state": "OR",
+            "prev_zip_code": "90000",
+            "years_at_prev_address": "3",
+            "months_at_prev_address": "11",
+            "jobs": {
+              "job": {
+                "employer": "My Company",
+                "occupation": "My Occupation",
+                "years_at_employer": "5",
+                "months_at_employer": "2",
+                "pay_method": "Direct",
+                "paycheck_type": "Computerized",
+                "taxes_withheld": "1",
+                "employment_status": "Permanent",
+                "monthly_income": "3000"
+              }
+            },
+            "vehicles": {
+              "vehicle": [
+                {
+                  "type": "tradein",
+                  "year": "2016",
+                  "make": "Toyota",
+                  "model": "Corolla",
+                  "vin": "2T1BURHE6GC555164",
+                  "trim": "S Plus",
+                  "mileage": "0",
+                  "exterior_color": "Black Sand Pearl",
+                  "interior_color": "Silver",
+                  "condition": "Excellent",
+                  "monthly_payment": "0",
+                  "amount_owed": "0",
+                  "retail": "30000",
+                  "wholesale": "20000",
+                  "book": "15000"
+                },
+                {
+                  "type": "interested",
+                  "year": "2016",
+                  "make": "Toyota",
+                  "model": "Sienna",
+                  "vin": "",
+                  "trim": "XLE",
+                  "mileage": "0",
+                  "exterior_color": "Red",
+                  "interior_color": "Blue",
+                  "condition": "New"
+                }
+              ]
+            },
+            "other_monthly_income": "1000",
+            "years_at_prev_employer": "5",
+            "months_at_prev_employer": "2",
+            "prev_employer": "Previous Company",
+            "employment_gap": "3",
+            "trade_year": "1999",
+            "trade_make": "Pontiac",
+            "trade_model": "Grand Am",
+            "trade_mileage": "95000",
+            "trade_monthly_payment": "300",
+            "trade_color": "Silver",
+            "trade_retail": "3000",
+            "trade_wholesale": "2000",
+            "trade_book": "Blue Book",
+            "military": "0",
+            "military_months_of_service": "0",
+            "military_pay_grade": "",
+            "military_ets": "",
+            "appt_date": "2012-08-30 09:15:00",
+            "notes": {
+              "note": {
+                "date": "2012-03-17 19:57:52",
+                "agent": "John E",
+                "note": "Additional $220\/month income from child support."
+              }
+            },
+            "disposition": "Dealer Needs to Call Back",
+            "disposition_id": "215",
+            "calls": {
+              "call": {
+                "date": "2016-03-17 19:49:21",
+                "agent": "John E",
+                "recording": "https:\/\/92295f6ce5d79dc3fed6-536161980c29f6c9b1682f2b65fa0381.ssl.cf2.rackcdn.com\/RE22fd5c4e8d1589c73388ad1ec18b7b97.mp3",
+                "lead_phone": "5031113333",
+                "direction": "Inbound",
+                "duration": "480",
+                "disposition": "Dealer Needs to Call Back",
+                "disposition_class": "Interested",
+                "disposition_id": "215"
+              }
+            },
+            "sms": {
+              "sms_message": {
+                "date": "2016-03-17 03:47:57",
+                "lead_phone": "5031113333",
+                "direction": "Inbound",
+                "message": "Thank you"
+              }
+            },
+            "appointment_followup": {
+              "followup_date": "2013-09-13 22:44:04",
+              "followup": {
+                "question": [
+                  {
+                    "question": "Were you able to make your appointment?",
+                    "answer": "Yes"
+                  },
+                  {
+                    "question": "Were you in contact with anyone from the dealership prior to your appointment?",
+                    "answer": "No"
+                  },
+                  {
+                    "question": "Did you work with <Person> at the dealership? If not, who did you work with?",
+                    "answer": "Charles"
+                  },
+                  {
+                    "question": "When you first arrived at the dealership, were you asked to fill out any additional paperwork?",
+                    "answer": "Yes"
+                  },
+                  {
+                    "question": "Did you purchase a vehicle?",
+                    "answer": "Yes"
+                  },
+                  {
+                    "question": "On a scale from 1 to 10, 10 being the best, what would you rate your overall experience?",
+                    "answer": "9"
+                  },
+                  {
+                    "question": "Comments",
+                    "answer": "You all some great guys the only part I might have a problem with is the down payment of 1,200 I miscalculated the dates and I won't have that money in my account until probably closer to the 28th - Directed Randy to give Charles a callback to discuss any financing concerns."
+                  }
+                ]
+              }
+            },
+            "lead_status": {
+              "call_cycle_completed": "1",
+              "status": "Appointment"
+            },
+            "additional_info": {
+              "custom1": "Your Custom Data",
+              "custom2": "Your Custom Data",
+              "custom3": "Your Custom Data"
+            }
+          }
+          ```
+        </details>
+        
+        <details>
+          <summary>
+            **Sample Success** (Click to expand)
+          </summary>
+          
+          ```
+          {
+            "success": "yes",
+            "message": "Lead Created"
+          }
+          ```
+        </details>
+        
+        <details>
+          <summary>
+            **Sample Error** (Click to expand)
+          </summary>
+          
+          ```
+          {
+            "success": "no",
+            "message": "ERROR MESSAGE"
+          }
+          ```
+        </details>
+        
+      parameters:
+        - name: id
+          in: path
+          description: 'lead_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+        - name: destination
+          in: query
+          description: 'url field'
+          required: true
+          schema:
+            type: string
+        - name: lead_action
+          in: query
+          description: |
+            One of:
+            - New Lead
+            - Update
+          schema:
+            type: string
+            default: 'New Lead'
+        - name: debug
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: debug_response
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Lead created'
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Lead is not found'
 
   '/activations':
     post:
