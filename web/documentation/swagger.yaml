@@ -1185,6 +1185,104 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Lead is not found'
+  '/campaign/{id}/match':
+    post:
+      tags:
+        - hidden
+      operationId: checkMatchCampaignById
+      description: 'You are able to check campaign matches by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'campaign_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file_type:
+                  type: string
+                  description: |
+                    One of:
+                     - sales
+                     - services
+                  default: 'sales'
+                match_type:
+                  type: string
+                  description: |
+                    One of:
+                     - loose
+                     - medium
+                     - strong
+                  default: 'loose'
+              example: 
+                {
+                  "file_type": "sales",
+                  "match_type": "medium"
+                }
+        description: 'Match settings'
+      responses:
+        '200':
+          description: 'Campaign match report'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: object
+                    properties:
+                      dealer_name:
+                        type: string
+                        example: 'Mann Co.'
+                      campaign_name:
+                        type: string
+                        example: '30 second approval'
+                      campaign_start:
+                        type: string
+                        format: date
+                        example: '2012-09-01'
+                      campaign_end:
+                        type: string
+                        format: date
+                        example: '2012-09-14'
+                      total_dms_records:
+                        type: integer
+                        example: 24
+                      total_leads_records:
+                        type: integer
+                        example: 28
+                      total_matches:
+                        type: integer
+                        example: 134
+                  match_results:
+                    type: array
+                    items:
+                      type: object
+              example:
+                {
+                  "summary": {
+                    "dealer_name": "Mann Co.",
+                    "campaign_name": "30 second approval",
+                    "campaign_start": "2012-09-01",
+                    "campaign_end": "2012-09-14",
+                    "total_dms_records": "24",
+                    "total_leads_records": "28",
+                    "total_matches": "134"
+                  },
+                  "match_results": []
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign ID is not found'
 
   '/activations':
     post:
