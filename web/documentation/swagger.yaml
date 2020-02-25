@@ -360,6 +360,152 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Agent is not found'
+  '/campaign/{id}/match':
+    post:
+      tags:
+        - hidden
+      operationId: checkMatchCampaignById
+      description: 'You are able to check campaign matches by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'campaign_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file_type:
+                  type: string
+                  description: |
+                    One of:
+                     - sales
+                     - services
+                  default: 'sales'
+                match_type:
+                  type: string
+                  description: |
+                    One of:
+                     - loose
+                     - medium
+                     - strong
+                  default: 'loose'
+              example: 
+                {
+                  "file_type": "sales",
+                  "match_type": "medium"
+                }
+        description: 'Match settings'
+      responses:
+        '200':
+          description: 'Campaign match report'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: object
+                    properties:
+                      dealer_name:
+                        type: string
+                        example: 'Mann Co.'
+                      campaign_name:
+                        type: string
+                        example: '30 second approval'
+                      campaign_start:
+                        type: string
+                        format: date
+                        example: '2012-09-01'
+                      campaign_end:
+                        type: string
+                        format: date
+                        example: '2012-09-14'
+                      total_dms_records:
+                        type: integer
+                        example: 24
+                      total_leads_records:
+                        type: integer
+                        example: 28
+                      total_matches:
+                        type: integer
+                        example: 134
+                  match_results:
+                    type: array
+                    items:
+                      type: object
+              example:
+                {
+                  "summary": {
+                    "dealer_name": "Mann Co.",
+                    "campaign_name": "30 second approval",
+                    "campaign_start": "2012-09-01",
+                    "campaign_end": "2012-09-14",
+                    "total_dms_records": "24",
+                    "total_leads_records": "28",
+                    "total_matches": "134"
+                  },
+                  "match_results": []
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
+  '/campaign/{id}/pdf_report':
+    post:
+      tags:
+        - hidden
+      operationId: generateCampaignPDFReportById
+      description: 'You are able to generate campaign pdf report by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'campaign_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                month:
+                  type: string
+              example:
+                {
+                  "month": "April"
+                }
+        description: 'Report settings'
+      responses:
+        '200':
+          description: 'Campaign pdf report file'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_pdf:
+                    description: 'CDN url to pdf file'
+                    type: string
+              example:
+                {
+                  "report_pdf": "https://3473694e20a61843a466-86b20b7aad023782337e52776e1043b6.ssl.cf2.rackcdn.com/campaign-123456-report.pdf"
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
   '/data/email':
     get:
       tags:
@@ -665,126 +811,6 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-  '/phones/search':
-    get:
-      tags:
-          - hidden
-      operationId: searchPhones
-      description: 'You are able to search phones by zip and/or area_code.'
-      parameters:
-        - name: area_code
-          in: query
-          description: 'Area Code'
-          required: true
-          schema:
-            type: integer
-            minimum: 100
-            maximum: 999
-            example: 346
-        - name: zip_code
-          in: query
-          description: 'Zip Code'
-          schema:
-            type: integer
-            minimum: 10000
-            maximum: 99999
-            example: 12345
-      responses:
-        '200':
-          description: 'Returns a list of phones'
-          content:
-            application/json:
-              example: 
-                [
-                  {
-                    "phone_number": "5551111111",
-                    "city": "Platteville",
-                    "zip": "80651"
-                  },
-                  {
-                    "phone_number": "5552222222",
-                    "city": "LAS VEGAS",
-                    "zip": "89139"
-                  }
-               ]
-        '400':
-          $ref: "#/components/responses/BadRequestError"
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-        '404':
-          description: 'Unable to find phone numbers in the specified area.'
-  '/phones/buy/{phone_number}':
-    post:
-      tags:
-        - hidden
-      operationId: buyPhone
-      description: 'You are able to buy phone number.'
-      parameters:
-        - name: phone_number
-          in: path
-          required: true
-          description: 'Phone Number of the campaign'
-          schema:
-            type: integer
-            minimum: 1000000000
-            maximum: 9999999999
-            example: 5551111111
-        - name: campaign_id
-          in: header
-          description: 'Campaign ID'
-          required: true
-          schema:
-            type: integer
-            example: 654321
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - label
-              properties:
-                label:
-                  type: string
-                  example: "Test Number"
-                redirect_number:
-                  type: integer
-                  example: 5551234567
-                whisper:
-                  type: boolean
-                  example: true
-                phone_type:
-                  description: "1 = Call Center,\n\n
-                    2 = Call Forward,\n\n
-                    3 = IVR,\n\n
-                    4 = IVR + Call Center.\n\n
-                    If you set phone_type = 1, the redirect_number will be removed."
-                  type: integer
-                  minimum: 1
-                  maximum: 4
-                  example: 1
-            example: 
-              {
-                "label": "Test Number",
-                "redirect_number": 5551234567,
-                "whisper": true,
-                "phone_type": 2
-              }
-      responses:
-        '200':
-          description: 'Phone has been bought successfully'
-          content:
-            application/json:
-              example: 
-                {
-                  "phone_sid": "PNea7ee8066b5d2157594e0228eda7b2c6"
-                }
-        '400':
-          description: 'Unable to acquire phone number'
-        '401':
-          $ref: "#/components/responses/UnauthorizedError"
-        '404':
-          description: 'Campaign is not found'
   '/leads/{id}/action':
     post:
       tags:
@@ -1185,104 +1211,126 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Lead is not found'
-  '/campaign/{id}/match':
-    post:
+  '/phones/search':
+    get:
       tags:
-        - hidden
-      operationId: checkMatchCampaignById
-      description: 'You are able to check campaign matches by id.'
+          - hidden
+      operationId: searchPhones
+      description: 'You are able to search phones by zip and/or area_code.'
       parameters:
-        - name: id
-          in: path
-          description: 'campaign_id field'
+        - name: area_code
+          in: query
+          description: 'Area Code'
           required: true
           schema:
-            type: string
-            example: 123456
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                file_type:
-                  type: string
-                  description: |
-                    One of:
-                     - sales
-                     - services
-                  default: 'sales'
-                match_type:
-                  type: string
-                  description: |
-                    One of:
-                     - loose
-                     - medium
-                     - strong
-                  default: 'loose'
-              example: 
-                {
-                  "file_type": "sales",
-                  "match_type": "medium"
-                }
-        description: 'Match settings'
+            type: integer
+            minimum: 100
+            maximum: 999
+            example: 346
+        - name: zip_code
+          in: query
+          description: 'Zip Code'
+          schema:
+            type: integer
+            minimum: 10000
+            maximum: 99999
+            example: 12345
       responses:
         '200':
-          description: 'Campaign match report'
+          description: 'Returns a list of phones'
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  summary:
-                    type: object
-                    properties:
-                      dealer_name:
-                        type: string
-                        example: 'Mann Co.'
-                      campaign_name:
-                        type: string
-                        example: '30 second approval'
-                      campaign_start:
-                        type: string
-                        format: date
-                        example: '2012-09-01'
-                      campaign_end:
-                        type: string
-                        format: date
-                        example: '2012-09-14'
-                      total_dms_records:
-                        type: integer
-                        example: 24
-                      total_leads_records:
-                        type: integer
-                        example: 28
-                      total_matches:
-                        type: integer
-                        example: 134
-                  match_results:
-                    type: array
-                    items:
-                      type: object
-              example:
-                {
-                  "summary": {
-                    "dealer_name": "Mann Co.",
-                    "campaign_name": "30 second approval",
-                    "campaign_start": "2012-09-01",
-                    "campaign_end": "2012-09-14",
-                    "total_dms_records": "24",
-                    "total_leads_records": "28",
-                    "total_matches": "134"
+              example: 
+                [
+                  {
+                    "phone_number": "5551111111",
+                    "city": "Platteville",
+                    "zip": "80651"
                   },
-                  "match_results": []
-                }
+                  {
+                    "phone_number": "5552222222",
+                    "city": "LAS VEGAS",
+                    "zip": "89139"
+                  }
+               ]
         '400':
           $ref: "#/components/responses/BadRequestError"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
-          description: 'Campaign ID is not found'
+          description: 'Unable to find phone numbers in the specified area.'
+  '/phones/buy/{phone_number}':
+    post:
+      tags:
+        - hidden
+      operationId: buyPhone
+      description: 'You are able to buy phone number.'
+      parameters:
+        - name: phone_number
+          in: path
+          required: true
+          description: 'Phone Number of the campaign'
+          schema:
+            type: integer
+            minimum: 1000000000
+            maximum: 9999999999
+            example: 5551111111
+        - name: campaign_id
+          in: header
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: integer
+            example: 654321
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - label
+              properties:
+                label:
+                  type: string
+                  example: "Test Number"
+                redirect_number:
+                  type: integer
+                  example: 5551234567
+                whisper:
+                  type: boolean
+                  example: true
+                phone_type:
+                  description: "1 = Call Center,\n\n
+                    2 = Call Forward,\n\n
+                    3 = IVR,\n\n
+                    4 = IVR + Call Center.\n\n
+                    If you set phone_type = 1, the redirect_number will be removed."
+                  type: integer
+                  minimum: 1
+                  maximum: 4
+                  example: 1
+            example: 
+              {
+                "label": "Test Number",
+                "redirect_number": 5551234567,
+                "whisper": true,
+                "phone_type": 2
+              }
+      responses:
+        '200':
+          description: 'Phone has been bought successfully'
+          content:
+            application/json:
+              example: 
+                {
+                  "phone_sid": "PNea7ee8066b5d2157594e0228eda7b2c6"
+                }
+        '400':
+          description: 'Unable to acquire phone number'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
 
   '/activations':
     post:
