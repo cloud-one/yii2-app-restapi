@@ -506,6 +506,113 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Campaign is not found'
+  '/campaign/{id}/report':
+    post:
+      tags:
+        - hidden
+      operationId: generateCampaignReportById
+      description: 'You are able to generate campaign report by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'campaign_id field'
+          required: true
+          schema:
+            type: string
+            example: 123456
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leads_by_time:
+                  description: |
+                    One of:
+                    - day
+                    - month
+                  type: string
+                zip_data:
+                  type: boolean
+              example:
+                {
+                  "leads_by_time": "day",
+                  "zip_data": "true"
+                }
+        description: 'Report settings'
+      responses:
+        '200':
+          description: |
+            Campaign report depends on campaign_type:
+             - directmail -> directmail_report
+             - credityes -> ownerbase_report
+             - ownerbase -> ownerbase_report
+          content:
+            application/json:
+              examples:
+                {
+                  "directmail_report": { 
+                    "value": {
+                      "response_rate": "12.00%",
+                      "contact_rate": "10.00%",
+                      "appointment_rate": "30.00%",
+                      "start_date": "03/25/2009",
+                      "end_date": "03/30/2009",
+                      "event_start_date": "03/25/2009",
+                      "event_end_date": "03/30/2009"
+                    }
+                  },
+                  "ownerbase_report": { 
+                    "value": {
+                      "response_rate": "12.00%",
+                      "contact_rate": "10.00%",
+                      "appointment_rate": "30.00%",
+                      "start_date": "03/25/2009",
+                      "end_date": "03/30/2009",
+                      "event_start_date": "03/25/2009",
+                      "event_end_date": "03/30/2009",
+                      "appointments": {
+                        "lead_id": "12258641",
+                        "name": "Steven Sharbonda",
+                        "appointment_date": "2020-03-07 12:00:00",
+                        "phone_preference": "cell",
+                        "phone_cell": "5056869501",
+                        "phone_home": "3326869511",
+                        "age": "32",
+                        "income": "5000"
+                      },
+                      "contacted_records": {
+                        "Opt Out": "20",
+                        "Not Interested": "100"
+                      },
+                      "lead_types": {
+                        "Web": "5",
+                        "Phone": "20",
+                        "Direct": "10",
+                        "SMS": "15",
+                        "Other": "1"
+                      },
+                      "campaign_active": "14",
+                      "leads_by_time": {
+                        "2020-02-13": "3",
+                        "2020-03-13": "1"
+                      },
+                      "zip_data": {
+                        "zip": "46234",
+                        "city": "INDIANAPOLIS",
+                        "lead_responses": "10",
+                        "mailed": "3",
+                        "distance": "230"
+                      }
+                    }
+                  }
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
   '/data/email':
     get:
       tags:
