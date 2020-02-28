@@ -360,6 +360,52 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: 'Agent is not found'
+  '/campaigns/{id}/list_appointments':
+    get:
+      tags:
+        - hidden
+      operationId: getCampaignListOfAppointmentsById
+      description: 'You are able to get the list of appointments for your campaign by id.'
+      parameters:
+        - name: id
+          in: path
+          description: 'Campaign ID'
+          required: true
+          schema:
+            type: string
+            example: 987654
+        - name: open_only
+          in: header
+          description: 'HAVING open_now = 1'
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: 'Returns campaign appointment slots'
+          content:
+            application/json:
+              example: 
+                {
+                  "time_zone": "US/Pacific",
+                  "appointment_start_date": "2012-09-01",
+                  "appointment_end_date": "2012-09-10",
+                  "days": {
+                    "d2020-03-04": {
+                      "h18:35:51": {
+                        "appointments": "0",
+                        "max_appoinments": "0",
+                        "can_schedule": "0"
+                      }
+                    }
+                  }
+                }
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: 'Campaign is not found'
   '/campaign/{id}/match':
     post:
       tags:
