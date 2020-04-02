@@ -2038,6 +2038,10 @@ paths:
                   description: 'Custom Text (require event_start_date field)'
                   type: string
                   example: 'Custom Text Data'
+                appointment_type:
+                  description: 'Appointment type'
+                  type: string
+                  example: 'Sales'
                 prize_info:
                   description: 'Prize Information (require event_start_date field)'
                   type: string
@@ -2261,6 +2265,7 @@ paths:
                 "event_end_date": "2015-10-22",
                 "custom_text": "Custom Text Data",
                 "prize_info": "Prize Data",
+                "appointment_type": "Sales",
                 "additional_info": {
                   "custom_field": "custom field data",
                   "custom_field1": "custom field data"
@@ -2345,6 +2350,7 @@ paths:
                   "event_end_date": "2016-10-22",
                   "custom_text": "Custom Text Data",
                   "prize_info": "Prize Data",
+                  "appointment_type": "Sales",
                   "additional_info": {
                     "custom_field": "custom field data",
                     "custom_field1": "custom field data"
@@ -2390,6 +2396,10 @@ paths:
                   description: 'Custom Text (require event_start_date field)'
                   type: string
                   example: 'Custom Text Data'
+                appointment_type:
+                  description: 'Appointment type'
+                  type: string
+                  example: 'Sales'
                 prize_info:
                   description: 'Prize Information (require event_start_date field)'
                   type: string
@@ -2613,6 +2623,7 @@ paths:
                 "event_end_date": "2015-10-22",
                 "custom_text": "Custom Text Data",
                 "prize_info": "Prize Data",
+                "appointment_type": "Sales",
                 "additional_info": {
                   "custom_field": "custom field data",
                   "custom_field1": "custom field data"
