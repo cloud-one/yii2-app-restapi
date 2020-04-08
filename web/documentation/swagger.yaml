@@ -2356,7 +2356,6 @@ paths:
                   "event_end_date": "2016-10-22",
                   "custom_text": "Custom Text Data",
                   "prize_info": "Prize Data",
-                  "appointment_type": "sales",
                   "additional_info": {
                     "custom_field": "custom field data",
                     "custom_field1": "custom field data"
